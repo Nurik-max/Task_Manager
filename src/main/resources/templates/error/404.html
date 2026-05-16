@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Ошибка 404</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="bg-light">
+<div class="container py-5 text-center">
+    <h1 class="display-1 text-danger">404</h1>
+    <h2>Упс! Страница не найдена</h2>
+    <p class="lead" th:text="${errorMessage}">Описание ошибки</p>
+    <a href="/tasks" class="btn btn-primary">Вернуться к списку задач</a>
+</div>
+</body>
+</html>

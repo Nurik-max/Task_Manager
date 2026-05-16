@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        .wrapper {
+            width: 210mm;
+            height: 297mm;
+            position: relative;
+        }
+        .error-card {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 500px;
+            background: #ffffff;
+            padding: 50px;
+            text-align: center;
+            border-radius: 15px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            border-top: 6px solid #dc3545;
+        }
+        .icon {
+            font-size: 60pt;
+            margin-bottom: 20px;
+        }
+        .error-code {
+            font-size: 72pt;
+            font-weight: 900;
+            color: #dc3545;
+            margin: 0;
+            line-height: 1;
+        }
+        .error-title {
+            font-size: 20pt;
+            color: #212529;
+            margin: 20px 0 10px;
+        }
+        .error-description {
+            font-size: 11pt;
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        .btn-action {
+            display: inline-block;
+            background-color: #0d6efd;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 11pt;
+        }
+        .footer-note {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            font-size: 9pt;
+            color: #adb5bd;
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <div class="error-card">
+        <div class="icon">⚙️</div>
+        <h1 class="error-code">500</h1>
+        <h2 class="error-title">Внутренняя ошибка сервера</h2>
+        <p class="error-description">
+            Упс! Что-то пошло не так на нашей стороне. <br>
+            Мы уже получили отчет об ошибке и занимаемся её устранением. Пожалуйста, попробуйте обновить страницу через несколько минут.
+        </p>
+        <a href="/tasks" class="btn-action">На главную</a>
+
+        <div class="footer-note">
+            Reference ID: #500-STK-2026
+        </div>
+    </div>
+</div>
+</body>
+</html>

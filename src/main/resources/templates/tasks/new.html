@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create New Task</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .task-container { background: white; padding: 30px; border-radius: 15px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="task-container shadow-sm">
+                <h1 class="h3 mb-4">➕ Create New Task</h1>
+
+                <form th:action="@{/tasks}" th:method="post" th:object="${task}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input type="text" th:field="*{description}"
+                               class="form-control" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                               placeholder="Enter task details...">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Initial Status</label>
+                        <select th:field="*{status}" class="form-select">
+                            <option th:each="s : ${T(org.example.Task_Manager.Model.Status).values()}"
+                                    th:value="${s}" th:text="${s}"></option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Assign to Worker</label>
+                        <select th:field="*{workerId}" class="form-select">
+                            <option value="">Select a worker...</option>
+
+                            <option th:each="worker : ${workers}"
+                                    th:value="${worker.id}"
+                                    th:text="${worker.name} + ' ' + ${worker.surname}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <a th:href="@{/tasks}" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Create Task</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
