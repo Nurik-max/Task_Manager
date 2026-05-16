@@ -2,7 +2,11 @@ package org.example.Task_Manager.Controller;
 
 
 import jakarta.validation.Valid;
+import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
+import org.example.Task_Manager.DTO.CreateWorkerDTO;
 import org.example.Task_Manager.DTO.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
@@ -10,9 +14,12 @@ import org.example.Task_Manager.Model.WorkerStatus;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
 import org.example.Task_Manager.Sevice.TaskService;
 import org.example.Task_Manager.Sevice.WorkerService;
+import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.WorkerSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -36,7 +43,9 @@ public class WorkerController {
         this.taskService = taskService;
     }
 
+
     @GetMapping
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String listWorkers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String name,
@@ -76,38 +85,73 @@ public class WorkerController {
     }
 
     @GetMapping("/new")
+    @PreAuthorize("hasRole('ADMIN')")
     public String newWorker(Model model) {
-        Worker worker = new Worker();
-        model.addAttribute("worker", new WorkerDTO());
-        System.out.println("Получен воркер: " + worker.getName() + " " + worker.getSurname());
-
+        model.addAttribute("worker", new AdminCreateWorkerDTO());
         return "workers/new";
     }
 
     @PostMapping
-    public String create(@ModelAttribute("worker") WorkerDTO workerDTO) {
-        workerService.saveWorker(workerDTO);
+    @PreAuthorize("hasRole('ADMIN')")
+    public String create(@ModelAttribute("worker")AdminCreateWorkerDTO adminCreateWorkerDTO) {
+        workerService.createWorker(adminCreateWorkerDTO);
         return "redirect:/workers";
     }
 
     // 2. Метод для перехода к редактированию (localhost:8080/workers/1/edit)
     @GetMapping("/{id}/edit")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String showOrEditWorker(@PathVariable("id") int id, Model model) {
        addWorkerDependenciesToModel(id, model);
         return "workers/edit"; // Открывает файл edit.html
     }
 
-    @PatchMapping("/{id}")
-   public String updateWorker(@ModelAttribute("worker")  @Valid WorkerDTO workerDTO,
+    @PostMapping("/{id}/edit")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+   public String updateWorker(@ModelAttribute("worker")  @Valid UpdateWorkerDTO updateWorkerDTO,
                               BindingResult bindingResult, @PathVariable("id") int id){
-
+        System.out.println("UPDATE HIT");
+        System.out.println(bindingResult.getAllErrors());
         if(bindingResult.hasErrors()){
             return "workers/edit";
         }
 
-        workerService.updateWorker(id, workerDTO);
+        workerService.updateWorker(id, updateWorkerDTO);
         return "redirect:/workers";
    }
+    @GetMapping("/change-password")
+    public String getChangePasswordPage(Model model) {
+
+        model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
+
+        return "workers/change-password";
+    }
+
+    @PostMapping("/change-password")
+    public String changePassword(
+            @AuthenticationPrincipal WorkerDetails workerDetails,
+            @ModelAttribute("changePasswordDTO") @Valid ChangePasswordDTO dto,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+            return "workers/change-password";
+        }
+
+        try {
+            workerService.changePassword(dto, workerDetails);
+
+            model.addAttribute("success", "Password changed successfully");
+
+        } catch (RuntimeException e) {
+
+            model.addAttribute("error", e.getMessage());
+
+            return "workers/change-password";
+        }
+
+        return "redirect:/workers";
+    }
     @GetMapping("/trash")
     public String showTrash(Model model, Pageable pageable) {
         // Используем нашу новую спецификацию
@@ -116,7 +160,8 @@ public class WorkerController {
         return "workers/trash"; // Путь к твоему новому HTML-файлу
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/delete")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String softDeleteWorker(@PathVariable("id") int id){
         Worker worker = workerRepository.findById(id).orElseThrow(()-> new WorkerNotFoundException(id));
         worker.setWorkerStatus(WorkerStatus.FIRED);
@@ -127,10 +172,11 @@ public class WorkerController {
     // Измени @GetMapping на @DeleteMapping
 // Измени путь на "/{id}/delete"
     @PostMapping("/{id}/force-delete")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String hardDeleteWorker(@PathVariable("id") int id, @RequestParam(required = false) Integer newWorkerId) {
 
         System.out.println(">>> Запрос на удаление получен! ID = " + id + ", NewWorkerId = " + newWorkerId);
-        List<Task> tasks = taskService.workerListOfTask(id);
+        List<Task> tasks = taskService.getTasksByWorkerId(id);
         if (!tasks.isEmpty() && newWorkerId == null) {
             return "redirect:/workers/" + id + "/edit?error=has_tasks";
         }
@@ -139,6 +185,7 @@ public class WorkerController {
     }
 
     @PostMapping("/{id}/restore")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String restoreWorker(@PathVariable int id) {
         workerService.restoreWorker(id);
         return "redirect:/workers"; // Возвращаемся в корзину
@@ -149,11 +196,11 @@ public class WorkerController {
         model.addAttribute("worker", workerService.showWorker(id));
 
         // Получаем список задач
-        List<Task> tasks = taskService.workerListOfTask(id);
+        List<Task> tasks = taskService.getTasksByWorkerId(id);
         model.addAttribute("tasks", tasks);
 
         // Получаем список всех работников, кроме того, которого редактируем
-        List<Worker> allWorkers = workerRepository.findAll();
+        List<Worker> allWorkers = workerService.findAllExcept(id);
         allWorkers.removeIf(w -> w.getId() == id);
         model.addAttribute("allWorkers", allWorkers);
     }

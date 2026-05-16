@@ -8,15 +8,17 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface WorkerRepository extends JpaRepository<Worker, Integer>, JpaSpecificationExecutor<Worker> {
 
-    List<Worker> findByName (String name);
+    Optional<Worker> findByUsername (String username);
     List<Worker> findBySurname (String surname);
     List<Worker> findByPosition (String position);
-
     Boolean existsWorkerById(int id);
+    Boolean existsWorkerByUsername(String username);
+    List<Worker> findByIdNot(int id);
 
 
 }

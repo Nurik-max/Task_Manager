@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -30,26 +30,38 @@
 
                     <div class="mb-4">
                         <label class="form-label">Initial Status</label>
-                        <select th:field="*{status}" class="form-select">
-                            <option th:each="s : ${T(org.example.Task_Manager.Model.Status).values()}"
-                                    th:value="${s}" th:text="${s}"></option>
+                        <input type="text"
+                               class="form-control"
+                               value="NEW"
+                               readonly>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label">Initial Priority</label>
+                        <select th:field="*{priority}" class="form-select">
+                            <option th:each="priority : ${T(org.example.Task_Manager.Model.Priority).values()}"
+                                    th:value="${priority}"
+                                    th:text="${priority}">
+                            </option>
                         </select>
                     </div>
 
                     <div class="mb-4">
+                        <div sec:authorize="hasRole('ADMIN')">
                         <label class="form-label">Assign to Worker</label>
                         <select th:field="*{workerId}" class="form-select">
                             <option value="">Select a worker...</option>
 
                             <option th:each="worker : ${workers}"
                                     th:value="${worker.id}"
-                                    th:text="${worker.name} + ' ' + ${worker.surname}">
+                                    th:text="${worker.username} + ' ' + ${worker.surname}">
                             </option>
                         </select>
                     </div>
+                    </div>
 
                     <div class="d-flex gap-2">
-                        <a th:href="@{/tasks}" class="btn btn-outline-secondary">Cancel</a>
+                        <a th:href="@{${baseUrl}}" class="btn btn-outline-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">Create Task</button>
                     </div>
                 </form>

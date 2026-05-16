@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
   <meta charset="UTF-8">
   <title>New Worker</title>
@@ -7,14 +9,15 @@
 </head>
 <body>
 <div class="container mt-5">
+  <div sec:authorize="hasRole('ADMIN')">
   <div class="card shadow-sm p-4 col-md-6 mx-auto">
     <h2 class="mb-4">Add New Worker</h2>
 
     <form th:action="@{/workers}" th:method="post" th:object="${worker}">
       <div class="mb-3">
         <label class="form-label">Name</label>
-        <input type="text" th:field="*{name}" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        <input type="text" th:field="*{username}" class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+        <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
       </div>
 
       <div class="mb-3">
@@ -27,6 +30,26 @@
         <label class="form-label">Position</label>
         <input type="text" th:field="*{position}" class="form-control" th:classappend="${#fields.hasErrors('position')} ? 'is-invalid'">
         <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="text" th:field="*{email}" class="form-control" placeholder="Choose email" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" th:field="*{password}" class="form-control" placeholder="Create password" required>
+      </div>
+
+      <div class="mb-4">
+        <label class="form-label">User Role</label>
+        <select th:field="*{userRole}" class="form-select">
+          <option th:each="role : ${T(org.example.Task_Manager.Model.UserRole).values()}"
+                  th:value="${role}"
+                  th:text="${role}">
+          </option>
+        </select>
       </div>
 
       <button type="submit" class="btn btn-success">Save Worker</button>

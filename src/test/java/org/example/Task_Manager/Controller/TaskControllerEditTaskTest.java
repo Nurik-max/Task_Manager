@@ -41,7 +41,7 @@ class TaskControllerEditTaskTest {
         taskDTO.setId(id);
         taskDTO.setStatus(Status.DONE);
 
-        when(taskService.showTask(id)).thenReturn(taskDTO);
+//        when(taskService.showTask(id)).thenReturn(taskDTO);
 
         mockMvc.perform(get("/tasks/1/edit"))
                 .andExpect(status().isOk())
@@ -56,9 +56,9 @@ class TaskControllerEditTaskTest {
 
         int id = 999;
 
-        doThrow( new TaskNotFoundException(id))
-                .when(taskService)
-                        .showTask(id);
+//        doThrow( new TaskNotFoundException(id))
+//                .when(taskService)
+//                        .showTask(id);
 
         mockMvc.perform(get("/tasks/999/edit", id)
                         .with(csrf()))

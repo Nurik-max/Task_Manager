@@ -51,7 +51,7 @@ class TaskServiceGetTasksTest {
 
         // Act
         Page<TaskDTO> result = taskService.getTasks(
-                null, null, null, null, null, false, pageable
+                null, null,null, null, null, null, false, pageable
         );
 
         // Assert

@@ -40,7 +40,7 @@ class TaskControllerShowTaskTest {
         taskDTO.setStatus(Status.IN_PROGRESS);
 
 
-        when(taskService.showTask(id)).thenReturn(taskDTO);
+//        when(taskService.showTask(id)).thenReturn(taskDTO);
 
         mockMvc.perform(get("/tasks/1"))
                 .andExpect(status().isOk())

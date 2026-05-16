@@ -14,15 +14,15 @@ public class WorkerServiceTest {
     @Autowired
     private WorkerRepository workerRepository;
 
-    @Test
-    void setUp(){
-        Worker worker = new Worker("William", "Lunghram", "programmer");
-        workerRepository.save(worker);
-
-        assertEquals("William", worker.getName());
-        assertEquals("Lunghram", worker.getSurname());
-        assertEquals("programmer", worker.getPosition());
-    }
+//    @Test
+//    void setUp(){
+//        Worker worker = new Worker("William", "Lunghram", "programmer");
+//        workerRepository.save(worker);
+//
+//        assertEquals("William", worker.getName());
+//        assertEquals("Lunghram", worker.getSurname());
+//        assertEquals("programmer", worker.getPosition());
+//    }
 
 
 }

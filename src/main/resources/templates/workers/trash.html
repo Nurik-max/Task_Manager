@@ -23,7 +23,7 @@
     </thead>
     <tbody>
     <tr th:each="worker : ${workers}">
-      <td th:text="${worker.name}">Name</td>
+      <td th:text="${worker.username}">Name</td>
       <td th:text="${worker.surname}">Surname</td>
       <td th:text="${worker.position}">Position</td>
       <td>
@@ -31,13 +31,12 @@
           <button type="submit" class="btn btn-sm btn-outline-success">Restore</button>
         </form>
 
-<!--        <a th:href="@{/workers/{id}/edit(id=${worker.id})}" class="btn btn-sm btn-primary d-inline">-->
-<!--          Редактировать-->
-<!--        </a>-->
-
         <form th:action="@{/workers/{id}/force-delete(id=${worker.id})}" method="post" class="d-inline">
-<!--          <input type="hidden" name="_method" value="DELETE"/>-->
-          <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Вы уверены?')">Hard Delete</button>
+<!--          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
+          <button type="submit" class="btn btn-sm btn-danger"
+                  onclick="return confirm('Вы уверены?')">
+            Hard Delete
+          </button>
         </form>
       </td>
     </tr>

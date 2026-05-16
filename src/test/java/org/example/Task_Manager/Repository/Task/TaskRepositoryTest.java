@@ -1,5 +1,6 @@
 package org.example.Task_Manager.Repository.Task;
 
+import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Repoitory.TaskRepository;
@@ -19,12 +20,12 @@ public class TaskRepositoryTest {
     @Autowired
     private TaskRepository taskRepository;
 @BeforeEach
-    void setUp(){
-        taskRepository.save(new Task("Купить молоко",null, Status.NEW));
-        taskRepository.save(new Task("Купить хлеб",null, Status.IN_PROGRESS));
-        taskRepository.save(new Task("Помыть машину",null, Status.NEW));
-
-    }
+//    void setUp(){
+//        taskRepository.save(new Task("Купить молоко",null, Status.NEW, Priority.MEDIUM));
+//        taskRepository.save(new Task("Купить хлеб",null, Status.IN_PROGRESS));
+//        taskRepository.save(new Task("Помыть машину",null, Status.NEW));
+//
+//    }
 @Test
 @DisplayName("Должен фильтровать задачи по статусу NEW")
     void shouldFilterByStatus(){

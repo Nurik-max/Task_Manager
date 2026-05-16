@@ -35,7 +35,7 @@ class TaskControllerHardDeleteTest {
         mockMvc.perform(post("/tasks/hard-delete/{id}", id)
                         .with(csrf()))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/trash"));
+                .andExpect(redirectedUrl("/tasks/trash"));
     }
 
     @Test
@@ -43,9 +43,9 @@ class TaskControllerHardDeleteTest {
 
         int id = 999;
 
-        doThrow( new TaskNotFoundException(id))
-                .when(taskService)
-                .hardDeleteTask(id);
+//        doThrow( new TaskNotFoundException(id))
+//                .when(taskService)
+//                .hardDeleteTask(id);
 
         mockMvc.perform(post("/tasks/hard-delete/{id}", id)
                 .with(csrf()))

@@ -1,0 +1,13 @@
+ USER permissions
+- create task
+- view task
+- update own task:
+    - status
+    - description
+- soft delete own task
+ ADMIN permissions
+ - everything
+ - reassign worker
+ - restore
+ - hard delete
+ - trash access

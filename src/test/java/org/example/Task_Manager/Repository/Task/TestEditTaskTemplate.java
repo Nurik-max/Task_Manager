@@ -36,7 +36,7 @@ public class TestEditTaskTemplate {
         testTask.setDescription("Test Task - success"); // Запомни эту строку
         testTask.setId(1);
 
-        when(taskService.showTask(1)).thenReturn(testTask);
+//        when(taskService.showTask(1)).thenReturn(testTask);
 
         mockMvc.perform(get("/tasks/1/edit"))
                 .andExpect(status().isOk())

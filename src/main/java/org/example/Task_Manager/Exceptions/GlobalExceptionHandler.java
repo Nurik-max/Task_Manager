@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
         return "error/500";
     }
 
+//    @ExceptionHandler(WorkerNotFoundByNameException.class)
+//    public handleWorkerNotFoundByName(WorkerNotFoundByNameException ex, Model model){
+//        model.addAttribute("errorCode", "500");
+//        model.addAttribute("errorMessage", "Произошла внутренняя ошибка сервера.");
+//    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public String handleValidationExceptions(MethodArgumentNotValidException ex, Model model) {
@@ -51,6 +57,13 @@ public class GlobalExceptionHandler {
         model.addAttribute("errorCode", "500");
         model.addAttribute("errorMessage", "Что-то пошло совсем не так. Мы уже разбираемся.");
         return "error/500";
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public String handleValidation(ValidationException ex, Model model) {
+        model.addAttribute("error", ex.getMessage());
+        return "register";
+
     }
     }
 

@@ -23,30 +23,43 @@
 <div class="container">
     <div class="task-container shadow-sm">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="h2">📋 Task List</h1>
+            <h1 class="h2" th:text="${pageTitle}">📋 Task List</h1>
             <div class="d-flex gap-2">
                 <a th:href="@{/tasks/trash}" class="btn btn-outline-secondary">🗑 Trash</a>
 
                 <a th:href="@{/tasks/new}" class="btn btn-primary">➕ Create New Task</a>
+
+                <form th:action="@{/logout}" method="post" style="display:inline;">
+                <button type="submit" class="btn btn-outline-danger">
+                    Logout
+                </button>
+            </form>
+                <a th:if="${isAdminPage}" href="/workers" class="btn btn-secondary"> Workers</a>
+
             </div>
         </div>
 
+
         <div class="card mb-4 shadow-sm border-0">
             <div class="card-body bg-light">
-                <form th:action="@{/tasks}" method="get" class="row g-2 align-items-end">
+                <form th:action="@{${baseUrl}}" method="get" class="row g-2 align-items-end">
 
+                    <!-- DESCRIPTION(KEYWORD) FILTER -->
                     <div class="col-md-3">
                         <label class="form-label small text-muted">Search:</label>
                         <input type="text" name="keyword" th:value="${keyword}"
                                class="form-control form-control-sm" placeholder="Task description...">
                     </div>
 
-                    <div class="col-md-3">
+                    <!-- USERNAME FILTER -->
+                    <div class="col-md-3"
+                         th:if="${isAdminPage}">
                         <label class="form-label small text-muted">Search:</label>
-                        <input type="text" name="name" th:value="${name}"
+                        <input type="text" name="username" th:value="${username}"
                                class="form-control form-control-sm" placeholder="Worker name...">
                     </div>
 
+                    <!-- STATUS FILTER -->
                     <div class="col-md-2">
                         <label class="form-label small text-muted">Status:</label>
                         <select name="status" class="form-select form-select-sm">
@@ -57,6 +70,18 @@
                         </select>
                     </div>
 
+                    <!-- PRIORITY FILTER -->
+                    <div class="col-md-2">
+                        <label class="form-label small text-muted">Priority:</label>
+                        <select name="priority" class="form-select form-select-sm">
+                            <option value="">All</option>
+                            <option value="HIGH" th:selected="${selectedPriority == 'HIGH'}">High</option>
+                            <option value="MEDIUM" th:selected="${selectedPriority == 'MEDIUM'}">Medium</option>
+                            <option value="LOW" th:selected="${selectedPriority == 'LOW'}">Low</option>
+                        </select>
+                    </div>
+
+                    <!-- DATE & TIME FILTER -->
                     <div class="col-md-2">
                         <label class="form-label small text-muted">From:</label>
                         <input type="text" name="start" id="start-date" th:value="${#temporals.format(start, 'yyyy-MM-dd''T''HH:mm')}" class="form-control form-control-sm" placeholder="Select date...">
@@ -68,7 +93,10 @@
 
                     <div class="col-md-3 d-flex gap-1">
                         <button type="submit" class="btn btn-sm btn-primary flex-grow-1">Filter</button>
-                        <a href="/tasks" class="btn btn-sm btn-outline-secondary">Reset</a>
+                        <a th:href="${baseUrl}"
+                           class="btn btn-sm btn-outline-secondary">
+                            Reset
+                        </a>
                     </div>
                 </form>
             </div>
@@ -80,16 +108,25 @@
                 <tr>
                     <th>Description</th>
                     <th>Status</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Priority</th>
+                    <th th:if="${isAdminPage}">
+                        Worker
+                    </th>
                     <th class="text-end">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr th:each="task : ${tasks}">
+                    <!-- DESCRIPTION-->
                     <td>
                         <a th:href="@{/tasks/{id}(id=${task.id})}"
                            th:text="${task.description}"
                            class="text-decoration-none fw-semibold text-dark"></a>
                     </td>
+
+                    <!-- STATUS -->
                     <td>
                             <span class="badge rounded-pill"
                                   th:classappend="${task.status.name() == 'DONE'} ? 'bg-success' :
@@ -97,33 +134,90 @@
                                   th:text="${task.status}">
                             </span>
                     </td>
+
+                    <!-- CREATED AT-->
+                    <td>
+                        <span class="text-muted small"
+                              th:text="${#temporals.format(task.createdDate,
+                                        'yyyy-MM-dd HH:mm')}">
+                        </span>
+                    </td>
+
+                    <!-- UPDATED AT -->
+                    <td>
+                        <span class="text-muted small"
+                              th:text="${#temporals.format(task.updatedDate,
+                                        'yyyy-MM-dd HH:mm')}">
+                        </span>
+                    </td>
+
+                    <!-- PRIORITY -->
+                    <td>
+                         <span class="badge rounded-pill"
+                              th:classappend="${task.priority.name() == 'HIGH'} ? 'bg-danger' :
+                                    (${task.priority.name() == 'MEDIUM'} ? 'bg-warning text-dark' : 'bg-success')"
+                               th:text="${task.priority}">
+                             </span>
+                    </td>
+
+                    <!-- WORKERS -->
+                    <td  th:if="${isAdminPage}"
+                            th:text="${task.workerFullName} ?: 'No worker assigned'"></td>
+
+
                     <td class="text-end">
                         <div class="btn-group btn-group-sm">
                             <a th:href="@{/tasks/{id}(id=${task.id})}" class="btn btn-outline-primary">View</a>
                             <a th:href="@{/tasks/{id}/edit(id=${task.id})}" class="btn btn-outline-dark">Edit</a>
-                            <form th:action="@{/tasks/{id}(id=${task.id})}" th:method="post" style="display:inline;">
+                            <form th:action="@{/tasks/{id}/delete(id=${task.id})}" th:method="post" style="display:inline;">
                                 <button type="submit" class="btn btn-danger"
                                         onclick="return confirm('Delete this task?')">🗑</button>
                             </form>
                         </div>
                     </td>
 
-                 <td th:text="${task.workerFullName} ?: 'No worker assigned'"></td>
 
                 </tr>
                 </tbody>
             </table>
             <nav aria-label="Page navigation" th:if="${totalPages > 0}">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">
-                        <a class="page-link" th:href="@{/templates/tasks(page=${currentPage - 1}, status=${selectedStatus}, keyword=${keyword})}">Previous</a>
+                    <li class="page-item"
+                        th:classappend="${currentPage == 0} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="${baseUrl
+         + '?page=' + (currentPage - 1)
+         + '&status=' + selectedStatus
+         + '&keyword=' + keyword}">
+                            Previous
+                        </a>
+
                     </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+                    <li class="page-item"
+                        th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
                         th:classappend="${i == currentPage} ? 'active'">
-                        <a class="page-link" th:href="@{/templates/tasks(page=${i}, status=${selectedStatus}, keyword=${keyword})}" th:text="${i + 1}">1</a>
+
+                        <a class="page-link"
+                           th:href="${baseUrl
+         + '?page=' + i
+         + '&status=' + selectedStatus
+         + '&keyword=' + keyword}"
+                           th:text="${i + 1}">
+                        </a>
+
                     </li>
-                    <li class="page-item" th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
-                        <a class="page-link" th:href="@{/templates/tasks(page=${currentPage + 1}, status=${selectedStatus}, keyword=${keyword})}">Next</a>
+                    <li class="page-item"
+                        th:classappend="${currentPage == totalPages - 1} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="${baseUrl
+         + '?page=' + (currentPage + 1)
+         + '&status=' + selectedStatus
+         + '&keyword=' + keyword}">
+                            Next
+                        </a>
+
                     </li>
                 </ul>
             </nav>

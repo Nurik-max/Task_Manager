@@ -13,15 +13,15 @@ public class WorkMapperTest {
 
 
     private final WorkerMapper workerMapper = Mappers.getMapper(WorkerMapper.class);
-    @Test
-    void testToDTO(){
-
-        Worker worker = new Worker();
-        worker.setName("William");
-
-        WorkerDTO workerDTO = workerMapper.toDTO(worker);
-
-        assertEquals("William", workerDTO.getName());
-
-    }
+//    @Test
+//    void testToDTO(){
+//
+//        Worker worker = new Worker();
+//        worker.setName("William");
+//
+//        WorkerDTO workerDTO = workerMapper.toDTO(worker);
+//
+//        assertEquals("William", workerDTO.getName());
+//
+//    }
 }

@@ -1,16 +1,31 @@
 package org.example.Task_Manager.Repoitory;
 
+import org.example.Task_Manager.DTO.CreateWorkerDTO;
 import org.example.Task_Manager.DTO.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Model.Worker;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface WorkerMapper {
 
-    @Mapping(source = "workerStatus", target = "workerStatus")
+    @Mapping(target = "userRole", constant = "USER")
+    @Mapping(target = "workerStatus", constant = "WORKS")
+    Worker toEntity(CreateWorkerDTO dto);
+
+//    @Mapping(source = "userRole", target = "userRole")
+@Mapping(target = "workerStatus", constant = "WORKS")
+    Worker adminCreateWorkerFromDTO(AdminCreateWorkerDTO dto);
+
     WorkerDTO toDTO(Worker worker);
 
-    @Mapping(source = "workerStatus", target = "workerStatus")
-    Worker toEntity(WorkerDTO workerDTO);
+    @BeanMapping(
+            nullValuePropertyMappingStrategy =
+                    NullValuePropertyMappingStrategy.IGNORE
+    )
+    void updateWorkerFromDTO(
+            UpdateWorkerDTO dto,
+            @MappingTarget Worker worker
+    );
 }

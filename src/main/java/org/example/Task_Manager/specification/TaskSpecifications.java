@@ -1,6 +1,7 @@
 package org.example.Task_Manager.specification;
 
 import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
@@ -25,6 +26,22 @@ public class TaskSpecifications {
             }
             // Генерируем условие равенства: колонки "status" значению переменной status
             return criteriaBuilder.equal(root.get("status"), status);
+        };
+    }
+
+    /**
+     * Фильтр по приоритету.
+     * SQL аналог: WHERE status = 'ENUM_VALUE'
+     */
+    public static Specification<Task> hasPriority(Priority priority){
+
+        return (root, query, criteriaBuilder) -> {
+// Если статус не передан, возвращаем "conjunction" (пустое условие 1=1)
+            if(priority == null){
+                return criteriaBuilder.conjunction();
+            }
+            // Генерируем условие равенства: колонки "status" значению переменной status
+            return criteriaBuilder.equal(root.get("priority"), priority);
         };
     }
 
@@ -57,7 +74,7 @@ public class TaskSpecifications {
             }
 
             return criteriaBuilder.like(criteriaBuilder.
-                    lower(root.join("worker").get("name")),"%" + name.toLowerCase() + "%");
+                    lower(root.join("worker").get("username")),"%" + name.toLowerCase() + "%");
         });
         }
 

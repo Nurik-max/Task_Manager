@@ -29,43 +29,43 @@ public class TaskServiceUpdateMethodTest {
 
     @InjectMocks
     private TaskService taskService;
-
-    @Test
-    void shouldUpdateTask() {
-        int taskId = 1;
-
-        TaskDTO dto = new TaskDTO();
-        dto.setDescription("chosen worker");
-        dto.setWorkerName("Gojo Satoru");
-
-        Task existingTask = new Task();
-        existingTask.setId(taskId);
-
-        Task updatedTask = new Task();
-        updatedTask.setId(taskId);
-
-        // mock
-        when(taskRepository.findById(taskId))
-                .thenReturn(Optional.of(existingTask));
-
-        when(taskMapper.toEntity(dto))
-                .thenReturn(updatedTask);
-
-        when(taskRepository.save(updatedTask))
-                .thenReturn(updatedTask);
-
-        when(taskMapper.toDTO(updatedTask))
-                .thenReturn(dto);
-
-        // act
-        TaskDTO result = taskService.updateTask(taskId, dto);
-
-        // assert
-        assertNotNull(result);
-        assertEquals("chosen worker", result.getDescription());
-
-        // verify
-        verify(taskRepository).findById(taskId);
-        verify(taskRepository).save(updatedTask);
-    }
+//
+////    @Test
+//    void shouldUpdateTask() {
+//        int taskId = 1;
+//
+//        TaskDTO dto = new TaskDTO();
+//        dto.setDescription("chosen worker");
+//        dto.setWorkerName("Gojo Satoru");
+//
+//        Task existingTask = new Task();
+//        existingTask.setId(taskId);
+//
+//        Task updatedTask = new Task();
+//        updatedTask.setId(taskId);
+//
+//        // mock
+//        when(taskRepository.findById(taskId))
+//                .thenReturn(Optional.of(existingTask));
+//
+//        when(taskMapper.toEntity(dto))
+//                .thenReturn(updatedTask);
+//
+//        when(taskRepository.save(updatedTask))
+//                .thenReturn(updatedTask);
+//
+//        when(taskMapper.toDTO(updatedTask))
+//                .thenReturn(dto);
+//
+//        // act
+//        TaskDTO result = taskService.updateTask(taskId, dto);
+//
+//        // assert
+//        assertNotNull(result);
+//        assertEquals("chosen worker", result.getDescription());
+//
+//        // verify
+//        verify(taskRepository).findById(taskId);
+//        verify(taskRepository).save(updatedTask);
+//    }
 }

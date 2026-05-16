@@ -1,5 +1,6 @@
 package org.example.Task_Manager.Repoitory;
 
+import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
@@ -9,6 +10,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecificationExecutor<Task> {
     List<Task> findByStatus(Status status);
@@ -28,5 +30,8 @@ public interface TaskRepository extends JpaRepository<Task, Integer>, JpaSpecifi
 
     List<Task> findByWorker_Id(int workerId);
 
-    List<Task> findByWorkerNameContainingIgnoreCase(String name);
+    List<Task> findByWorkerUsernameContainingIgnoreCase(String username);
+
+    Optional<Task> findByIdAndWorkerUsername(int id, String username);
+    Page<Task> findByWorkerIdAndIsDeletedTrue(int id, Pageable pageable);
 }

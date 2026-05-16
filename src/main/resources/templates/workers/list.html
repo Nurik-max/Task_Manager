@@ -23,13 +23,13 @@
         </thead>
         <tbody>
         <tr th:each="worker : ${workers}">
-            <td th:text="${worker.name}">Name</td>
+            <td th:text="${worker.username}">Name</td>
             <td th:text="${worker.surname}">Surname</td>
             <td th:text="${worker.position}">Position</td>
             <td>
                 <a th:href="@{/workers/{id}/edit(id=${worker.id})}" class="btn btn-sm btn-outline-warning">Edit</a>
 
-                <form th:action="@{/workers/{id}(id=${worker.id})}" th:method="post" style="display:inline;">
+                <form th:action="@{/workers/{id}/delete(id=${worker.id})}" th:method="post" style="display:inline;">
                     <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
             </td>

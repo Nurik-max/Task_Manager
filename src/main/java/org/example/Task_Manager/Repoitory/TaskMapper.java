@@ -11,8 +11,10 @@ public interface TaskMapper {
     // Перевод из Entity в DTO:
     @Mapping(target = "workerId", source = "worker.id")
     // Вот здесь MapStruct сам возьмет имя из worker.name и положит в workerName
-    @Mapping(target = "workerName", source = "worker.name")
+    @Mapping(target = "workerUsername", source = "worker.username")
     @Mapping(target = "workerSurname", source = "worker.surname")
+    @Mapping(target = "deletedAt", source = "deletedAt")
+    @Mapping(target = "createdDate", source = "createdDate")
     TaskDTO toDTO(Task task);
 
     // Перевод из DTO в Entity:

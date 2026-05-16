@@ -15,12 +15,13 @@
             <strong>Внимание!</strong> Нельзя удалить работника, так как за ним закреплены задачи. Пожалуйста, переназначьте или удалите их перед удалением.
         </div>
 
-        <form th:action="@{/workers/{id}(id=${worker.id})}" th:method="patch" th:object="${worker}">
+        <form th:action="@{/workers/{id}/edit(id=${worker.id})}" th:method="post" th:object="${worker}">
+<!--            <input type="hidden" name="_method" value="PATCH"/>-->
 
             <div class="mb-3">
                 <label class="form-label">Name</label>
-                <input type="text" th:field="*{name}" class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'">
-                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                <input type="text" th:field="*{username}" class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
             </div>
 
             <div class="mb-3">
@@ -33,6 +34,12 @@
                 <label class="form-label">Position</label>
                 <input type="text" th:field="*{position}" class="form-control" th:classappend="${#fields.hasErrors('position')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Email</label>
+                <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
             </div>
 
             <div class="mb-3">
@@ -79,7 +86,7 @@
                     <div class="mb-3">
                         <select name="newWorkerId" class="form-select" required>
                             <option value="" disabled selected>Выберите сотрудника...</option>
-                            <option th:each="w : ${allWorkers}" th:value="${w.id}" th:text="${w.name} + ' ' + ${w.surname}"></option>
+                            <option th:each="w : ${allWorkers}" th:value="${w.id}" th:text="${w.username} + ' ' + ${w.surname}"></option>
                         </select>
                     </div>
                     <button type="submit" class="btn btn-danger">Переназначить и удалить</button>
