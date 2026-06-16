@@ -26,7 +26,7 @@ public class Task {
     private LocalDateTime createdDate;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedDate;
 
     private LocalDateTime deletedAt;
 
@@ -50,7 +50,7 @@ public class Task {
 
         this.description = description;
         this.createdDate = createdDate;
-        this.updatedAt = updatedAt;
+        this.updatedDate = updatedAt;
         this.status = status;
         this.priority = priority;
     }
@@ -123,10 +123,10 @@ public class Task {
     }
 
     public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+        return updatedDate;
     }
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
+        this.updatedDate = updatedAt;
     }
 }
