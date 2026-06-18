@@ -8,7 +8,7 @@ public class AdminUpdateTaskRequest {
         private String description;
         private Priority priority;
         private Status status;
-        private Long updatedWorkerId;
+        private Integer updatedWorkerId;
 
     public AdminUpdateTaskRequest() {
     }
@@ -29,11 +29,11 @@ public class AdminUpdateTaskRequest {
         this.priority = priority;
     }
 
-    public Long getUpdatedWorkerId() {
+    public Integer getUpdatedWorkerId() {
         return updatedWorkerId;
     }
 
-    public void setUpdatedWorkerId(Long updatedWorkerId) {
+    public void setUpdatedWorkerId(Integer updatedWorkerId) {
         this.updatedWorkerId = updatedWorkerId;
     }
 
