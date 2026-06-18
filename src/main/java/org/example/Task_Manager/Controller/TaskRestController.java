@@ -50,12 +50,19 @@ public class TaskRestController {
     }
 
     @PostMapping
-//    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     public TaskDTO createTask(
             @RequestBody TaskDTO taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
         return taskService.saveTask(taskDTO, workerDetails);
     }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}")
+    public String showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
 
+
+        TaskDTO taskDTO = taskService.showTask(id, workerDetails);
+        return taskDTO.toString();
+    }
 }
