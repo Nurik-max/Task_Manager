@@ -1,5 +1,6 @@
 package org.example.Task_Manager.Sevice.Task;
 import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Repoitory.TaskMapper;
 import org.example.Task_Manager.Repoitory.TaskRepository;
@@ -37,7 +38,7 @@ public class TaskServiceSaveMethodTest {
         Task taskEntity = new Task();
 
         // Настройка поведения репозитория
-        when(taskMapper.toEntity(any(TaskDTO.class))).thenReturn(taskEntity);
+        when(taskMapper.toEntity(any(AdminCreateTaskRequest.class))).thenReturn(taskEntity);
 
         // Настройка поведения для taskRepository
         when(taskRepository.save(any(Task.class))).thenReturn(taskEntity);
