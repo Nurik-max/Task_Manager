@@ -2,6 +2,9 @@ package org.example.Task_Manager.Sevice;
 
 import jakarta.transaction.Transactional;
 import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.*;
@@ -41,7 +44,7 @@ public class TaskService {
     }
 
     @Transactional
-    public TaskDTO saveTask(TaskDTO taskDTO, WorkerDetails workerDetails) {
+    public TaskDTO saveTask(AdminCreateTaskRequest taskDTO, WorkerDetails workerDetails) {
         // 1. Превращаем DTO в Entity (подготовка к базе)
         Task task = taskMapper.toEntity(taskDTO);
         Worker currentWorker = workerDetails.getWorker();
@@ -53,14 +56,14 @@ public class TaskService {
             task.setStatus(Status.NEW);
 
 
-        if (taskDTO.getWorkerId() != null) {
+        if (taskDTO.getWorker_id() != null) {
 
             if (!isAdmin) {
                 throw new AccessDeniedException("Only admin can assign tasks");
             }
 
-            Worker worker = workerRepository.findById(taskDTO.getWorkerId())
-                    .orElseThrow(()-> new WorkerNotFoundException(taskDTO.getWorkerId()));
+            Worker worker = workerRepository.findById(taskDTO.getWorker_id())
+                    .orElseThrow(()-> new WorkerNotFoundException(taskDTO.getWorker_id()));
 
             task.setWorker(worker);
 
@@ -78,7 +81,7 @@ public class TaskService {
     @Transactional
     public TaskDTO updateTask(
             int taskId,
-            TaskDTO taskDTO,
+            AdminUpdateTaskRequest taskDTO,
             WorkerDetails workerDetails
     ) {
 
@@ -109,14 +112,14 @@ public class TaskService {
             task.setStatus(taskDTO.getStatus());
         }
 
-        if (taskDTO.getWorkerId() != null) {
+        if (taskDTO.getUpdatedWorkerId() != null) {
 
             if (!isAdmin) {
                 throw new AccessDeniedException("Only admin can reassign");
             }
 
-            Worker newWorker = workerRepository.findById(taskDTO.getWorkerId())
-                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getWorkerId()));
+            Worker newWorker = workerRepository.findById(taskDTO.getUpdatedWorkerId())
+                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getUpdatedWorkerId()));
 
             task.setWorker(newWorker);
         }
