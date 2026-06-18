@@ -6,7 +6,6 @@ public class CreateTaskRequest {
 
        private String description;
        private Priority priority;
-       private Long assignedWorkerId; // только для ADMIN
 
 
     public CreateTaskRequest() {
@@ -28,11 +27,4 @@ public class CreateTaskRequest {
         this.priority = priority;
     }
 
-    public Long getAssignedWorkerId() {
-        return assignedWorkerId;
-    }
-
-    public void setAssignedWorkerId(Long assignedWorkerId) {
-        this.assignedWorkerId = assignedWorkerId;
-    }
 }
