@@ -99,7 +99,7 @@ public class TaskRestController {
 
     //restore task
     @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}")
+    @PatchMapping("/{id}/restore")
     public ResponseEntity<Void> restoreTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
 
         taskService.restoreTask(id, workerDetails);
