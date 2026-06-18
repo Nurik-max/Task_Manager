@@ -27,7 +27,12 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register").permitAll()
+                        .requestMatchers(
+                                "/login",
+                                "/register",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
@@ -40,9 +45,7 @@ public class SecurityConfig {
                 .logout(logout -> logout
                         .logoutSuccessUrl("/login")
                 )
-                .csrf(csrf -> csrf
-                        .ignoringRequestMatchers("/login", "/register")
-                );
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
