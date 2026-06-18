@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
+import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Sevice.TaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
@@ -59,10 +61,19 @@ public class TaskRestController {
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public String showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
+    public TaskDTO showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
+        return  taskService.showTask(id, workerDetails);
+    }
 
-
-        TaskDTO taskDTO = taskService.showTask(id, workerDetails);
-        return taskDTO.toString();
+    // 📌 обновление
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> updateTask(
+            @PathVariable int id,
+            @RequestBody TaskDTO dto,
+            @AuthenticationPrincipal WorkerDetails workerDetails
+    ) {
+        taskService.updateTask(id,dto, workerDetails);
+        return ResponseEntity.ok().build();
     }
 }
