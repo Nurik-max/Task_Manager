@@ -5,16 +5,15 @@ import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 
@@ -48,6 +47,15 @@ public class TaskRestController {
         Page<TaskDTO> tasksDTO = taskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
 
         return tasksDTO;
+    }
+
+    @PostMapping
+//    @PreAuthorize("isAuthenticated()")
+    public TaskDTO createTask(
+            @RequestBody TaskDTO taskDTO,
+            @AuthenticationPrincipal WorkerDetails workerDetails
+    ) {
+        return taskService.saveTask(taskDTO, workerDetails);
     }
 
 }
