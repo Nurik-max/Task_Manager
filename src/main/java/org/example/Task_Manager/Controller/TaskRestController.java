@@ -95,4 +95,14 @@ public class TaskRestController {
         taskService.hardDeleteTask(id, workerDetails);
         return ResponseEntity.noContent().build();
     }
+
+    //restore task
+    @PreAuthorize("isAuthenticated()")
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> restoreTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
+
+        taskService.restoreTask(id, workerDetails);
+
+        return ResponseEntity.ok().build();
+    }
 }
