@@ -84,4 +84,15 @@ public class TaskRestController {
         taskService.softDeleteTask(id, workerDetails);
       return ResponseEntity.ok().build();
     }
+
+    //task hard delete
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> hardDeleteTask(
+            @PathVariable int id,
+            @AuthenticationPrincipal WorkerDetails workerDetails
+    ) {
+        taskService.hardDeleteTask(id, workerDetails);
+        return ResponseEntity.noContent().build();
+    }
 }
