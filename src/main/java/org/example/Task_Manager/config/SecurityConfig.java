@@ -3,12 +3,16 @@ package org.example.Task_Manager.config;
 import org.example.Task_Manager.Controller.CustomAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -23,15 +27,14 @@ public class SecurityConfig {
     }
 
     @Bean
+    @Order(2)
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/login",
-                                "/register",
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**"
+                                "/register"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
@@ -50,6 +53,42 @@ public class SecurityConfig {
         return http.build();
     }
 
+    @Bean
+    @Order(1)
+    public SecurityFilterChain apiSecurity(HttpSecurity http) throws Exception {
+
+        http
+                .securityMatcher("/api/**", "/v3/api-docs/**", "/swagger-ui/**")
+                .csrf(csrf -> csrf.disable())
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(auth -> auth
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form.disable())
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(restAuthEntryPoint())
+                );
+
+        return http.build();
+    }
+
+    @Bean
+    public AuthenticationEntryPoint restAuthEntryPoint() {
+        return (request, response, authException) -> {
+            response.setStatus(401);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Unauthorized\"}");
+        };
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler() {
+        return (request, response, ex) -> {
+            response.setStatus(403);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"error\":\"Forbidden\"}");
+        };
+    }
     @Bean
     public BCryptPasswordEncoder passwordEncoder(){
 
