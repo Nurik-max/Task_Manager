@@ -1,9 +1,14 @@
 package org.example.Task_Manager.Repoitory;
 
 import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Task;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
@@ -17,7 +22,13 @@ public interface TaskMapper {
     @Mapping(target = "createdDate", source = "createdDate")
     TaskDTO toDTO(Task task);
 
+    //for admin
+    void updateTaskForAdmin(@MappingTarget Task task, AdminUpdateTaskRequest request);
+
+    //for user
+    void updateTaskForUser(@MappingTarget Task task, UpdateTaskRequest request);
+
     // Перевод из DTO в Entity:
     @Mapping(target = "worker", ignore = true)
-    Task toEntity(TaskDTO taskDTO);
+    Task toEntity(AdminCreateTaskRequest request);
 }
