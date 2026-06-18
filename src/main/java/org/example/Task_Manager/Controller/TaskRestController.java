@@ -68,12 +68,20 @@ public class TaskRestController {
     // 📌 обновление
     @PreAuthorize("isAuthenticated()")
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updateTask(
+    public ResponseEntity<TaskDTO> updateTask(
             @PathVariable int id,
             @RequestBody TaskDTO dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        taskService.updateTask(id,dto, workerDetails);
-        return ResponseEntity.ok().build();
+        TaskDTO updatedDto = taskService.updateTask(id,dto, workerDetails);
+        return ResponseEntity.ok(updatedDto);
+    }
+
+    //task soft delete
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/{id}")
+    public ResponseEntity<Void> softDeleteTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
+        taskService.softDeleteTask(id, workerDetails);
+      return ResponseEntity.ok().build();
     }
 }
