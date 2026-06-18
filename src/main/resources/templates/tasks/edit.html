@@ -37,6 +37,16 @@
                     </div>
 
                     <div class="mb-4">
+                        <label class="form-label">Initial Priority</label>
+                        <select th:field="*{priority}" class="form-select">
+                            <option th:each="priority : ${T(org.example.Task_Manager.Model.Priority).values()}"
+                                    th:value="${priority}"
+                                    th:text="${priority}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
                         <div sec:authorize="hasRole('ADMIN')">
                         <label class="form-label">Assign to Worker</label>
                         <select th:field="*{workerId}" class="form-select">
