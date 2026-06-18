@@ -2,6 +2,8 @@ package org.example.Task_Manager.Controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
@@ -55,7 +57,7 @@ public class TaskRestController {
     @PostMapping
     @PreAuthorize("isAuthenticated()")
     public TaskDTO createTask(
-            @RequestBody TaskDTO taskDTO,
+            @RequestBody AdminCreateTaskRequest taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
         return taskService.saveTask(taskDTO, workerDetails);
@@ -71,7 +73,7 @@ public class TaskRestController {
     @PatchMapping("/{id}")
     public ResponseEntity<TaskDTO> updateTask(
             @PathVariable int id,
-            @RequestBody TaskDTO dto,
+            @RequestBody AdminUpdateTaskRequest dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
         TaskDTO updatedDto = taskService.updateTask(id,dto, workerDetails);

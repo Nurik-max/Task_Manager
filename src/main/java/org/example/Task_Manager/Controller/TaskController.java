@@ -3,6 +3,8 @@ package org.example.Task_Manager.Controller;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.DTO.WorkerDTO;
+import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
@@ -172,7 +174,7 @@ public class TaskController {
     // 📌 создание
     @PreAuthorize("isAuthenticated()")
     @PostMapping
-    public String createNewTask(@ModelAttribute("task") @Valid TaskDTO taskDTO,
+    public String createNewTask(@ModelAttribute("task") @Valid AdminCreateTaskRequest taskDTO,
                                 BindingResult bindingResult,
                                 @AuthenticationPrincipal WorkerDetails workerDetails,
                                 Model model) {
@@ -223,7 +225,7 @@ public class TaskController {
     @PatchMapping("/{id}")
     public String updateTask(
             @PathVariable int id,
-            @ModelAttribute TaskDTO dto,
+            @ModelAttribute AdminUpdateTaskRequest dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
         taskService.updateTask(id, dto, workerDetails);
