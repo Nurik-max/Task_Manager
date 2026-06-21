@@ -2,8 +2,8 @@ package org.example.Task_Manager.Sevice;
 
 import jakarta.transaction.Transactional;
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.*;

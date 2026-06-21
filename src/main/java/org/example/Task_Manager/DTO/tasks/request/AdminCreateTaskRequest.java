@@ -1,4 +1,4 @@
-package org.example.Task_Manager.DTO.tasks;
+package org.example.Task_Manager.DTO.tasks.request;
 
 import lombok.Getter;
 import lombok.Setter;
