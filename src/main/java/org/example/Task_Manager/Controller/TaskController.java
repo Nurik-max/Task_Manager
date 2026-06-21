@@ -2,10 +2,10 @@ package org.example.Task_Manager.Controller;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
@@ -174,7 +174,7 @@ public class TaskController {
     // 📌 создание
     @PreAuthorize("hasRole('ADMIN')") //For ADMIN
     @PostMapping
-    public String createNewTask(@ModelAttribute("task") @Valid AdminCreateTaskRequest taskDTO,
+    public String createNewTask(@ModelAttribute("task") AdminCreateTaskRequest taskDTO,
                                 BindingResult bindingResult,
                                 @AuthenticationPrincipal WorkerDetails workerDetails,
                                 Model model) {

@@ -2,8 +2,8 @@ package org.example.Task_Manager.Sevice;
 
 import jakarta.transaction.Transactional;
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Model.*;
 import org.example.Task_Manager.Repoitory.TaskMapper;

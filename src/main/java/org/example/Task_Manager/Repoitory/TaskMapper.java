@@ -1,10 +1,10 @@
 package org.example.Task_Manager.Repoitory;
 
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Task;
 import org.mapstruct.*;
 
