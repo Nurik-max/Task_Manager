@@ -18,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,7 +39,7 @@ public class TaskRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping //For Admin
-    public Page<TaskDTO> getAllTasks(
+    public ResponseEntity<Page<TaskDTO>>getAllTasks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) Priority priority,
@@ -54,16 +55,39 @@ public class TaskRestController {
         //For usual task
         Page<TaskDTO> tasksDTO = adminTaskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
 
-        return tasksDTO;
+        return ResponseEntity.ok(tasksDTO);
+    }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/my")
+    public ResponseEntity<Page<TaskDTO>> getAllMyTasks( @AuthenticationPrincipal WorkerDetails workerDetails,
+                                 @RequestParam(defaultValue = "0") int page,
+                                 @RequestParam(required = false) Status status,
+                                 @RequestParam(required = false) Priority priority,
+                                 @RequestParam(required = false) String keyword,
+                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                 @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+                                 @RequestParam(defaultValue = "false") boolean isDeleted,
+                                 Model model){
+
+        Pageable pageable = PageRequest.of(page,10);
+
+
+        Page<TaskDTO> taskDTOPage = userTaskService.workerListOfTask(workerDetails,status,priority ,keyword, start, end, pageable, isDeleted);
+
+
+        return ResponseEntity.ok(taskDTOPage);
+
     }
 
     @PostMapping("/admin")//For Admin
     @PreAuthorize("hasRole('ADMIN')")
-    public TaskDTO createTask(
+    public ResponseEntity<TaskDTO> createTask(
             @RequestBody AdminCreateTaskRequest taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        return adminTaskService.saveTask(taskDTO, workerDetails);
+        TaskDTO savedAdminTaskDTO = adminTaskService.saveTask(taskDTO, workerDetails);
+        return ResponseEntity.ok(savedAdminTaskDTO);
     }
 
     @PostMapping("/user")//For Users
@@ -82,7 +106,7 @@ public class TaskRestController {
     }
 
     // 📌 обновление
-    @PreAuthorize("hasRole('ADMIN'")//For Admin
+    @PreAuthorize("hasRole('ADMIN')")//For Admin
     @PatchMapping("/{id}/admin")
     public ResponseEntity<TaskDTO> updateTask(
             @PathVariable int id,
@@ -95,7 +119,8 @@ public class TaskRestController {
 
     @PreAuthorize("isAuthenticated()")//For Users
     @PatchMapping("/{id}/user")
-    public ResponseEntity<TaskDTO> updateMyTask(@PathVariable int id, UpdateTaskRequest updateTaskRequest,
+    public ResponseEntity<TaskDTO> updateMyTask(@PathVariable int id,
+                                                @RequestBody UpdateTaskRequest updateTaskRequest,
                                                 @AuthenticationPrincipal WorkerDetails workerDetails){
 
         TaskDTO updatedDTO = userTaskService.updateUserTask(id, updateTaskRequest, workerDetails);
@@ -104,7 +129,7 @@ public class TaskRestController {
 
     //task soft delete
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/soft-delete")
     public ResponseEntity<Void> softDeleteTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
         adminTaskService.softDeleteTask(id, workerDetails);
       return ResponseEntity.ok().build();
