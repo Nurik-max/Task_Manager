@@ -3,9 +3,12 @@ package org.example.Task_Manager.Controller;
 import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Sevice.AdminTaskService;
+import org.example.Task_Manager.Sevice.UserTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +18,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -25,9 +29,11 @@ import java.time.LocalDateTime;
 public class TaskRestController {
 
     private final AdminTaskService adminTaskService;
+    private final UserTaskService userTaskService;
 
-    public TaskRestController(AdminTaskService adminTaskService) {
+    public TaskRestController(AdminTaskService adminTaskService, UserTaskService userTaskService) {
         this.adminTaskService = adminTaskService;
+        this.userTaskService = userTaskService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -51,14 +57,24 @@ public class TaskRestController {
         return tasksDTO;
     }
 
-    @PostMapping
-    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/admin")//For Admin
+    @PreAuthorize("hasRole('ADMIN')")
     public TaskDTO createTask(
             @RequestBody AdminCreateTaskRequest taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
         return adminTaskService.saveTask(taskDTO, workerDetails);
     }
+
+    @PostMapping("/user")//For Users
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<TaskDTO> createMyTasks(@RequestBody CreateTaskRequest request, @AuthenticationPrincipal WorkerDetails workerDetails) {
+
+        TaskDTO savedUserTaskDTO = userTaskService.saveUserTask(request,workerDetails);
+        return ResponseEntity.ok(savedUserTaskDTO);
+    }
+
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public TaskDTO showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
@@ -66,8 +82,8 @@ public class TaskRestController {
     }
 
     // 📌 обновление
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN'")//For Admin
+    @PatchMapping("/{id}/admin")
     public ResponseEntity<TaskDTO> updateTask(
             @PathVariable int id,
             @RequestBody AdminUpdateTaskRequest dto,
@@ -75,6 +91,15 @@ public class TaskRestController {
     ) {
         TaskDTO updatedDto = adminTaskService.updateTask(id,dto, workerDetails);
         return ResponseEntity.ok(updatedDto);
+    }
+
+    @PreAuthorize("isAuthenticated()")//For Users
+    @PatchMapping("/{id}/user")
+    public ResponseEntity<TaskDTO> updateMyTask(@PathVariable int id, UpdateTaskRequest updateTaskRequest,
+                                                @AuthenticationPrincipal WorkerDetails workerDetails){
+
+        TaskDTO updatedDTO = userTaskService.updateUserTask(id, updateTaskRequest, workerDetails);
+        return ResponseEntity.ok(updatedDTO);
     }
 
     //task soft delete
