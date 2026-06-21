@@ -1,13 +1,11 @@
 package org.example.Task_Manager.Controller;
 
-import lombok.RequiredArgsConstructor;
 import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
-import org.example.Task_Manager.Model.UserRole;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,7 +15,6 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -27,10 +24,10 @@ import java.time.LocalDateTime;
 //@RequiredArgsConstructor
 public class TaskRestController {
 
-    private final TaskService taskService;
+    private final AdminTaskService adminTaskService;
 
-    public TaskRestController(TaskService taskService) {
-        this.taskService = taskService;
+    public TaskRestController(AdminTaskService adminTaskService) {
+        this.adminTaskService = adminTaskService;
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -49,7 +46,7 @@ public class TaskRestController {
         Pageable pageable = PageRequest.of(page,10);
 
         //For usual task
-        Page<TaskDTO> tasksDTO = taskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
+        Page<TaskDTO> tasksDTO = adminTaskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
 
         return tasksDTO;
     }
@@ -60,12 +57,12 @@ public class TaskRestController {
             @RequestBody AdminCreateTaskRequest taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        return taskService.saveTask(taskDTO, workerDetails);
+        return adminTaskService.saveTask(taskDTO, workerDetails);
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public TaskDTO showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
-        return  taskService.showTask(id, workerDetails);
+        return  adminTaskService.showTask(id, workerDetails);
     }
 
     // 📌 обновление
@@ -76,7 +73,7 @@ public class TaskRestController {
             @RequestBody AdminUpdateTaskRequest dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        TaskDTO updatedDto = taskService.updateTask(id,dto, workerDetails);
+        TaskDTO updatedDto = adminTaskService.updateTask(id,dto, workerDetails);
         return ResponseEntity.ok(updatedDto);
     }
 
@@ -84,7 +81,7 @@ public class TaskRestController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}")
     public ResponseEntity<Void> softDeleteTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
-        taskService.softDeleteTask(id, workerDetails);
+        adminTaskService.softDeleteTask(id, workerDetails);
       return ResponseEntity.ok().build();
     }
 
@@ -95,7 +92,7 @@ public class TaskRestController {
             @PathVariable int id,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        taskService.hardDeleteTask(id, workerDetails);
+        adminTaskService.hardDeleteTask(id, workerDetails);
         return ResponseEntity.noContent().build();
     }
 
@@ -104,7 +101,7 @@ public class TaskRestController {
     @PatchMapping("/{id}/restore")
     public ResponseEntity<Void> restoreTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
 
-        taskService.restoreTask(id, workerDetails);
+        adminTaskService.restoreTask(id, workerDetails);
 
         return ResponseEntity.ok().build();
     }
@@ -113,7 +110,7 @@ public class TaskRestController {
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
     public ResponseEntity<Page<TaskDTO>> showTrash(@PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
         // Вызываем сервис с isDeleted = true
-        Page<TaskDTO> tasks = taskService.getDeletedTasks(workerDetails, pageable);
+        Page<TaskDTO> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
 
         return ResponseEntity.ok(tasks); // Убедись, что файл называется trash.html
     }

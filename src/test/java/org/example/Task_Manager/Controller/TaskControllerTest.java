@@ -1,8 +1,7 @@
 package org.example.Task_Manager.Controller;
-import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Repoitory.TaskRepository;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -15,7 +14,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.mockito.ArgumentMatchers.any; // 🔥 Важный правильный импорт
-import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.verify;
 
 @WebMvcTest(TaskController.class)
@@ -28,7 +26,7 @@ public class TaskControllerTest {
     private TaskRepository taskRepository;
 
     @MockBean
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @MockBean
     private WorkerRepository workerRepository;

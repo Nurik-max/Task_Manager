@@ -4,7 +4,7 @@ import org.example.Task_Manager.Controller.TaskController;
 import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Repoitory.TaskRepository;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -14,7 +14,6 @@ import org.springframework.test.web.servlet.MockMvc;
 // Импорты ТОЛЬКО для MockMvc (никаких MockRest!)
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.mockito.Mockito.when;
 import static org.hamcrest.Matchers.*;
 @WebMvcTest(TaskController.class)
 public class TestEditTaskTemplate {
@@ -23,7 +22,7 @@ public class TestEditTaskTemplate {
     private MockMvc mockMvc;
 
     @MockBean
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @MockBean
     private TaskRepository taskRepository;

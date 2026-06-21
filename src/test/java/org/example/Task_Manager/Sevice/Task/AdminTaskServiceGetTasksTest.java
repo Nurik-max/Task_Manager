@@ -4,7 +4,7 @@ import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Repoitory.TaskMapper;
 import org.example.Task_Manager.Repoitory.TaskRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -22,10 +22,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
-class TaskServiceGetTasksTest {
+class AdminTaskServiceGetTasksTest {
 
     @InjectMocks
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @Mock
     private TaskRepository taskRepository;
@@ -50,7 +50,7 @@ class TaskServiceGetTasksTest {
                 .thenReturn(dto);
 
         // Act
-        Page<TaskDTO> result = taskService.getTasks(
+        Page<TaskDTO> result = adminTaskService.getTasks(
                 null, null,null, null, null, null, false, pageable
         );
 

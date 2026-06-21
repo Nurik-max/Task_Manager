@@ -3,10 +3,9 @@ package org.example.Task_Manager.Controller;
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -25,7 +24,7 @@ class TaskControllerTestNewTask {
    private MockMvc mockMvc;
 
     @MockBean
-   private TaskService taskService;
+   private AdminTaskService adminTaskService;
 
     @MockBean
    private WorkerRepository workerRepository;

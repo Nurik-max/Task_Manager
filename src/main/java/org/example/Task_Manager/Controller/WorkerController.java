@@ -4,7 +4,6 @@ package org.example.Task_Manager.Controller;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
-import org.example.Task_Manager.DTO.CreateWorkerDTO;
 import org.example.Task_Manager.DTO.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
@@ -12,7 +11,7 @@ import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Model.WorkerStatus;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.WorkerSpecification;
@@ -35,12 +34,12 @@ public class WorkerController {
 
     private final WorkerService workerService;
     private final WorkerRepository workerRepository;
-    private final TaskService taskService;
+    private final AdminTaskService adminTaskService;
 
-    public WorkerController(WorkerService workerService, WorkerRepository workerRepository, TaskService taskService) {
+    public WorkerController(WorkerService workerService, WorkerRepository workerRepository, AdminTaskService adminTaskService) {
         this.workerService = workerService;
         this.workerRepository = workerRepository;
-        this.taskService = taskService;
+        this.adminTaskService = adminTaskService;
     }
 
 
@@ -176,7 +175,7 @@ public class WorkerController {
     public String hardDeleteWorker(@PathVariable("id") int id, @RequestParam(required = false) Integer newWorkerId) {
 
         System.out.println(">>> Запрос на удаление получен! ID = " + id + ", NewWorkerId = " + newWorkerId);
-        List<Task> tasks = taskService.getTasksByWorkerId(id);
+        List<Task> tasks = adminTaskService.getTasksByWorkerId(id);
         if (!tasks.isEmpty() && newWorkerId == null) {
             return "redirect:/workers/" + id + "/edit?error=has_tasks";
         }
@@ -196,7 +195,7 @@ public class WorkerController {
         model.addAttribute("worker", workerService.showWorker(id));
 
         // Получаем список задач
-        List<Task> tasks = taskService.getTasksByWorkerId(id);
+        List<Task> tasks = adminTaskService.getTasksByWorkerId(id);
         model.addAttribute("tasks", tasks);
 
         // Получаем список всех работников, кроме того, которого редактируем

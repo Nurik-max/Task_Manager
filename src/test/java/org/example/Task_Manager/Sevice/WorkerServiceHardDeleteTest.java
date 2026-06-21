@@ -8,15 +8,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.stubbing.OngoingStubbing;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class WorkerServiceHardDeleteTest {
@@ -25,7 +21,7 @@ class WorkerServiceHardDeleteTest {
     private WorkerService workerService;
 
     @Mock
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @Mock
     private TaskRepository taskRepository;
@@ -56,7 +52,7 @@ class WorkerServiceHardDeleteTest {
         workerService.hardDeleteWorker(oldWorker, newWorker);
 
         //Assert
-        verify(taskService)
+        verify(adminTaskService)
                 .taskReassignment(oldWorker, newWorker);
 
         verify(workerRepository)

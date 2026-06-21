@@ -1,10 +1,10 @@
 package org.example.Task_Manager.Sevice.Task;
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Repoitory.TaskMapper;
 import org.example.Task_Manager.Repoitory.TaskRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,13 +17,13 @@ import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ExtendWith(MockitoExtension.class)
-public class TaskServiceSaveMethodTest {
+public class AdminTaskServiceSaveMethodTest {
 
     @Mock
     private TaskRepository taskRepository;
 
     @InjectMocks
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     // 1. Добавляем Mock для маппера, чтобы он не был null
     @Mock
@@ -38,7 +38,7 @@ public class TaskServiceSaveMethodTest {
         Task taskEntity = new Task();
 
         // Настройка поведения репозитория
-        when(taskMapper.toEntity(any(AdminCreateTaskRequest.class))).thenReturn(taskEntity);
+        when(taskMapper.toEntity(any(CreateTaskRequest.class))).thenReturn(taskEntity);
 
         // Настройка поведения для taskRepository
         when(taskRepository.save(any(Task.class))).thenReturn(taskEntity);

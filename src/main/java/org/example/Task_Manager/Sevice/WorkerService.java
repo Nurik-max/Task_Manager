@@ -36,14 +36,14 @@ public class WorkerService {
     private final WorkerRepository workerRepository;
 
     @Autowired
-    private final TaskService taskService;
+    private final AdminTaskService adminTaskService;
 
 
-    public WorkerService(WorkerMapper workerMapper, BCryptPasswordEncoder passwordEncoder, WorkerRepository workerRepository, TaskService taskService) {
+    public WorkerService(WorkerMapper workerMapper, BCryptPasswordEncoder passwordEncoder, WorkerRepository workerRepository, AdminTaskService adminTaskService) {
         this.workerMapper = workerMapper;
         this.passwordEncoder = passwordEncoder;
         this.workerRepository = workerRepository;
-        this.taskService = taskService;
+        this.adminTaskService = adminTaskService;
     }
 
     //Method for users
@@ -108,7 +108,7 @@ public class WorkerService {
 
         // 3. Выполняем переназначение ТОЛЬКО если указан новый работник
         if (newWorkerId != null) {
-            taskService.taskReassignment(id, newWorkerId);
+            adminTaskService.taskReassignment(id, newWorkerId);
         }
 
         // 4. Удаляем работника

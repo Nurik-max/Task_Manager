@@ -1,9 +1,7 @@
 package org.example.Task_Manager.Controller;
 
-import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
-import org.example.Task_Manager.Sevice.WorkerService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -11,7 +9,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
@@ -24,7 +21,7 @@ class TaskControllerCreateNewTaskTest {
     MockMvc mockMvc;
 
     @MockBean
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @MockBean
     private WorkerRepository workerRepository;

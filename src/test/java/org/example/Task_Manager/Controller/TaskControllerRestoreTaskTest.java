@@ -1,18 +1,13 @@
 package org.example.Task_Manager.Controller;
 
-import org.example.Task_Manager.Exceptions.TaskNotFoundException;
-import org.example.Task_Manager.Model.Task;
-import org.example.Task_Manager.Repoitory.TaskRepository;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -26,7 +21,7 @@ class TaskControllerRestoreTaskTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private TaskService taskService;
+    private AdminTaskService adminTaskService;
 
     @MockBean
     private WorkerRepository workerRepository;
