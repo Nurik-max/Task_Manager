@@ -1,7 +1,11 @@
 package org.example.Task_Manager.DTO.tasks;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.example.Task_Manager.Model.Priority;
 
+@Setter
+@Getter
 public class AdminCreateTaskRequest {
 
     private String description;
@@ -11,27 +15,4 @@ public class AdminCreateTaskRequest {
     public AdminCreateTaskRequest() {
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Integer getWorker_id() {
-        return worker_id;
-    }
-
-    public void setWorker_id(Integer worker_id) {
-        this.worker_id = worker_id;
-    }
-
-    public Priority getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Priority priority) {
-        this.priority = priority;
-    }
 }
