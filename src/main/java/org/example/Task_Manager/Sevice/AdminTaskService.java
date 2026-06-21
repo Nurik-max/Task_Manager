@@ -261,10 +261,18 @@ public class AdminTaskService {
             int taskId,
             WorkerDetails workerDetails) {
         Worker currentWorker = workerDetails.getWorker();
-            return taskRepository.findById(taskId)
+        Task task;
+        if (currentWorker.getUserRole() == UserRole.ADMIN) {
+
+           task = taskRepository.findById(taskId)            // ...и никак его не использовали!
                     .orElseThrow(() -> new TaskNotFoundException(taskId));
+        }
+        else {
+            task = taskRepository.findByIdAndWorkerUsername(taskId,workerDetails.getUsername()).
+                    orElseThrow(() -> new TaskNotFoundException(taskId));
 
-
+        }
+ return  task;
     }
 
 
