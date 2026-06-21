@@ -2,16 +2,16 @@ package org.example.Task_Manager.Controller;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.WorkerDTO;
 import org.example.Task_Manager.DTO.tasks.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
-import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Repoitory.TaskRepository;
 import org.example.Task_Manager.Repoitory.WorkerRepository;
-import org.example.Task_Manager.Sevice.TaskService;
+import org.example.Task_Manager.Sevice.AdminTaskService;
+import org.example.Task_Manager.Sevice.UserTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,14 +32,14 @@ import java.time.LocalDateTime;
 public class TaskController {
 
 
-    private final TaskService taskService;
+    private final AdminTaskService adminTaskService;
+    private final UserTaskService userTaskService;
 
     private final WorkerRepository workerRepository;
 
-    public TaskController( TaskService taskService, WorkerRepository workerRepository) {
-
-        this.taskService = taskService;
-
+    public TaskController(AdminTaskService adminTaskService, UserTaskService userTaskService, WorkerRepository workerRepository) {
+        this.adminTaskService = adminTaskService;
+        this.userTaskService = userTaskService;
         this.workerRepository = workerRepository;
     }
 
@@ -80,7 +80,7 @@ public class TaskController {
 // 🔥 Весь твой сложный if-else заменяется одной строчкой!
 
       //For usual task
-      Page<TaskDTO> tasksDTO = taskService.getTasks(statusEnum,priorityEnum ,keyword,username, start, end, isDeleted, pageable);
+      Page<TaskDTO> tasksDTO = adminTaskService.getTasks(statusEnum,priorityEnum ,keyword,username, start, end, isDeleted, pageable);
 
 
         model.addAttribute("tasks", tasksDTO.getContent());
@@ -134,7 +134,7 @@ public class TaskController {
             }
         }
 
-        Page<TaskDTO> taskDTOPage = taskService.workerListOfTask(workerDetails,statusEnum,priorityEnum ,keyword, start, end, pageable, isDeleted);
+        Page<TaskDTO> taskDTOPage = userTaskService.workerListOfTask(workerDetails,statusEnum,priorityEnum ,keyword, start, end, pageable, isDeleted);
 
         model.addAttribute("tasks", taskDTOPage.getContent());
         model.addAttribute("currentPage", page);
@@ -172,7 +172,7 @@ public class TaskController {
     }
 
     // 📌 создание
-    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("hasRole('ADMIN')") //For ADMIN
     @PostMapping
     public String createNewTask(@ModelAttribute("task") @Valid AdminCreateTaskRequest taskDTO,
                                 BindingResult bindingResult,
@@ -181,23 +181,36 @@ public class TaskController {
 
         if (bindingResult.hasErrors()) {
 
-            if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
                 model.addAttribute("workers", workerRepository.findAll());
                 model.addAttribute("baseUrl", "/tasks");
-            } else {
-                model.addAttribute("baseUrl", "/tasks/my");
-            }
-            System.out.println("POST HIT");
-            System.out.println("ERRORS = " + bindingResult.hasErrors());
-            System.out.println("DTO = " + taskDTO);
+
+//            System.out.println("POST HIT");
+//            System.out.println("ERRORS = " + bindingResult.hasErrors());
+//            System.out.println("DTO = " + taskDTO);
             return "tasks/new"; // ❗ ВАЖНО: return только тут
         }
 
         // ✅ СОХРАНЕНИЕ
-        taskService.saveTask(taskDTO, workerDetails);
+        adminTaskService.saveTask(taskDTO, workerDetails);
 
 
         // ✅ РЕДИРЕКТ ПОСЛЕ УСПЕХА
+        return "redirect:/tasks";
+    }
+
+
+    @PreAuthorize("isAuthenticated()") //For USERs
+    @PostMapping("/my")
+    public String createMyTasks(@ModelAttribute("task") @Valid CreateTaskRequest request, BindingResult bindingResult,
+                                Model model,
+                                @AuthenticationPrincipal WorkerDetails workerDetails){
+
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("baseUrl", "/tasks/my");
+            return "tasks/new";
+        }
+
+        userTaskService.saveUserTask(request,workerDetails);
         return "redirect:/tasks";
     }
 
@@ -205,7 +218,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
     public String showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ,Model model){
-        model.addAttribute("task", taskService.showTask(id, workerDetails));
+        model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
         return "tasks/view";
     }
 
@@ -213,7 +226,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/edit")
     public String editTask(@PathVariable("id") int id,@AuthenticationPrincipal WorkerDetails workerDetails ,Model model){
-        model.addAttribute("task", taskService.showTask(id, workerDetails));
+        model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             model.addAttribute("workers", workerRepository.findAll());
         }
@@ -221,18 +234,27 @@ public class TaskController {
     }
 
     // 📌 обновление
-    @PreAuthorize("isAuthenticated()")
-    @PatchMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')") //For ADMIN
+    @PatchMapping("/{id}/admin")
     public String updateTask(
             @PathVariable int id,
             @ModelAttribute AdminUpdateTaskRequest dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        taskService.updateTask(id, dto, workerDetails);
+        adminTaskService.updateTask(id, dto, workerDetails);
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             return "redirect:/tasks";
         }
 
+        return "redirect:/tasks/edit";
+    }
+
+    @PreAuthorize("isAuthenticated()") //for USERs
+    @PatchMapping("/{id}/user")
+    public String updateMyTasks(@PathVariable int id, @ModelAttribute UpdateTaskRequest request,
+                                @AuthenticationPrincipal WorkerDetails workerDetails){
+
+        userTaskService.updateUserTask(id, request,workerDetails);
         return "redirect:/tasks/my";
     }
 
@@ -240,7 +262,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/delete")
     public String softDeleteTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
-        taskService.softDeleteTask(id, workerDetails);;
+        adminTaskService.softDeleteTask(id, workerDetails);;
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             return "redirect:/tasks";
         }
@@ -252,7 +274,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/hard-delete/{id}")
     public String hardDeleteTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
-        taskService.hardDeleteTask(id, workerDetails);
+        adminTaskService.hardDeleteTask(id, workerDetails);
         return "redirect:/tasks/trash";
     }
 
@@ -260,7 +282,7 @@ public class TaskController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/restore/{id}")
     public String restoreTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails){
-        taskService.restoreTask(id, workerDetails);
+        adminTaskService.restoreTask(id, workerDetails);
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             return "redirect:/tasks";
         }
@@ -271,7 +293,7 @@ public class TaskController {
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
     public String showTrash(Model model, @PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
         // Вызываем сервис с isDeleted = true
-        Page<TaskDTO> tasks = taskService.getDeletedTasks(workerDetails, pageable);
+        Page<TaskDTO> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
 
         model.addAttribute("tasks", tasks.getContent());
         model.addAttribute("currentPage", pageable.getPageNumber());
