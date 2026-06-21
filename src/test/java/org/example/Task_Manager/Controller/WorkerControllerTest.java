@@ -1,6 +1,6 @@
 package org.example.Task_Manager.Controller;
 
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,10 +1,12 @@
 package org.example.Task_Manager.Controller;
 
-import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
+import org.example.Task_Manager.DTO.tasks.response.UserResponse;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Sevice.AdminTaskService;
@@ -39,7 +41,7 @@ public class TaskRestController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @GetMapping //For Admin
-    public ResponseEntity<Page<TaskDTO>>getAllTasks(
+    public ResponseEntity<Page<AdminResponse>>getAllTasks(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) Status status,
             @RequestParam(required = false) Priority priority,
@@ -53,14 +55,14 @@ public class TaskRestController {
         Pageable pageable = PageRequest.of(page,10);
 
         //For usual task
-        Page<TaskDTO> tasksDTO = adminTaskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
+        Page<AdminResponse> adminResponses = adminTaskService.getTasks(status,priority ,keyword,username, start, end, isDeleted, pageable);
 
-        return ResponseEntity.ok(tasksDTO);
+        return ResponseEntity.ok(adminResponses);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/my")
-    public ResponseEntity<Page<TaskDTO>> getAllMyTasks( @AuthenticationPrincipal WorkerDetails workerDetails,
+    public ResponseEntity<Page<UserResponse>> getAllMyTasks( @AuthenticationPrincipal WorkerDetails workerDetails,
                                  @RequestParam(defaultValue = "0") int page,
                                  @RequestParam(required = false) Status status,
                                  @RequestParam(required = false) Priority priority,
@@ -73,7 +75,7 @@ public class TaskRestController {
         Pageable pageable = PageRequest.of(page,10);
 
 
-        Page<TaskDTO> taskDTOPage = userTaskService.workerListOfTask(workerDetails,status,priority ,keyword, start, end, pageable, isDeleted);
+        Page<UserResponse> taskDTOPage = userTaskService.workerListOfTask(workerDetails,status,priority ,keyword, start, end, pageable, isDeleted);
 
 
         return ResponseEntity.ok(taskDTOPage);
@@ -82,48 +84,48 @@ public class TaskRestController {
 
     @PostMapping("/admin")//For Admin
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<TaskDTO> createTask(
+    public ResponseEntity<AdminResponse> createTask(
             @RequestBody AdminCreateTaskRequest taskDTO,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        TaskDTO savedAdminTaskDTO = adminTaskService.saveTask(taskDTO, workerDetails);
+        AdminResponse savedAdminTaskDTO = adminTaskService.saveTask(taskDTO, workerDetails);
         return ResponseEntity.ok(savedAdminTaskDTO);
     }
 
     @PostMapping("/user")//For Users
     @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<TaskDTO> createMyTasks(@RequestBody CreateTaskRequest request, @AuthenticationPrincipal WorkerDetails workerDetails) {
+    public ResponseEntity<UserResponse> createMyTasks(@RequestBody CreateTaskRequest request, @AuthenticationPrincipal WorkerDetails workerDetails) {
 
-        TaskDTO savedUserTaskDTO = userTaskService.saveUserTask(request,workerDetails);
+        UserResponse savedUserTaskDTO = userTaskService.saveUserTask(request,workerDetails);
         return ResponseEntity.ok(savedUserTaskDTO);
     }
 
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}")
-    public TaskDTO showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
+    public AdminResponse showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ){
         return  adminTaskService.showTask(id, workerDetails);
     }
 
     // 📌 обновление
     @PreAuthorize("hasRole('ADMIN')")//For Admin
     @PatchMapping("/{id}/admin")
-    public ResponseEntity<TaskDTO> updateTask(
+    public ResponseEntity<AdminResponse> updateTask(
             @PathVariable int id,
             @RequestBody AdminUpdateTaskRequest dto,
             @AuthenticationPrincipal WorkerDetails workerDetails
     ) {
-        TaskDTO updatedDto = adminTaskService.updateTask(id,dto, workerDetails);
+        AdminResponse updatedDto = adminTaskService.updateTask(id,dto, workerDetails);
         return ResponseEntity.ok(updatedDto);
     }
 
     @PreAuthorize("isAuthenticated()")//For Users
     @PatchMapping("/{id}/user")
-    public ResponseEntity<TaskDTO> updateMyTask(@PathVariable int id,
+    public ResponseEntity<UserResponse> updateMyTask(@PathVariable int id,
                                                 @RequestBody UpdateTaskRequest updateTaskRequest,
                                                 @AuthenticationPrincipal WorkerDetails workerDetails){
 
-        TaskDTO updatedDTO = userTaskService.updateUserTask(id, updateTaskRequest, workerDetails);
+        UserResponse updatedDTO = userTaskService.updateUserTask(id, updateTaskRequest, workerDetails);
         return ResponseEntity.ok(updatedDTO);
     }
 
@@ -158,9 +160,9 @@ public class TaskRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
-    public ResponseEntity<Page<TaskDTO>> showTrash(@PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
+    public ResponseEntity<Page<AdminResponse>> showTrash(@PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
         // Вызываем сервис с isDeleted = true
-        Page<TaskDTO> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
+        Page<AdminResponse> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
 
         return ResponseEntity.ok(tasks); // Убедись, что файл называется trash.html
     }

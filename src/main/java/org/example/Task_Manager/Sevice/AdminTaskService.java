@@ -1,15 +1,15 @@
 package org.example.Task_Manager.Sevice;
 
 import jakarta.transaction.Transactional;
-import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.*;
-import org.example.Task_Manager.Repoitory.TaskMapper;
-import org.example.Task_Manager.Repoitory.TaskRepository;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.TaskMapper;
+import org.example.Task_Manager.Repository.TaskRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.TaskSpecifications;
 import org.springframework.data.domain.Page;
@@ -40,9 +40,9 @@ public class AdminTaskService {
     }
 
     @Transactional
-    public TaskDTO saveTask(AdminCreateTaskRequest taskDTO, WorkerDetails workerDetails) {
+    public AdminResponse saveTask(AdminCreateTaskRequest taskDTO, WorkerDetails workerDetails) {
         // 1. Превращаем DTO в Entity (подготовка к базе)
-        Task task = taskMapper.adminToEntity(taskDTO);
+        Task task = taskMapper.toEntity(taskDTO);
         Worker currentWorker = workerDetails.getWorker();
 
         boolean isAdmin = currentWorker.getUserRole() == UserRole.ADMIN;
@@ -68,11 +68,11 @@ public class AdminTaskService {
         Task savedTask = taskRepository.save(task);
         System.out.println(task.getCreatedDate());
         // 4. Возвращаем DTO! (Контроллер увидит готовый объект с ID)
-        return taskMapper.toDTO(savedTask);
+        return taskMapper.toAdminResponse(savedTask);
     }
 
     @Transactional
-    public TaskDTO updateTask(
+    public AdminResponse updateTask(
             int taskId,
             AdminUpdateTaskRequest taskDTO,
             WorkerDetails workerDetails
@@ -106,12 +106,12 @@ public class AdminTaskService {
             task.setWorker(newWorker);
         }
 
-        return taskMapper.toDTO(task);
+        return taskMapper.toAdminResponse(task);
     }
 
-    public TaskDTO showTask(int id, WorkerDetails workerDetails){
+    public AdminResponse showTask(int id, WorkerDetails workerDetails){
 
-        return taskMapper.toDTO(getAccessibleTask(id, workerDetails));
+        return taskMapper.toAdminResponse(getAccessibleTask(id, workerDetails));
     }
 
     @Transactional
@@ -139,7 +139,7 @@ public class AdminTaskService {
 
 
     //for Admin, he can get all tasks
-    public Page<TaskDTO> getTasks(Status status, Priority priority, String keyword, String username,
+    public Page<AdminResponse> getTasks(Status status, Priority priority, String keyword, String username,
                                LocalDateTime start, LocalDateTime end, boolean isDeleted ,Pageable pageable){
 
         Specification<Task> spec = Specification.where(TaskSpecifications.isDeleted(isDeleted));
@@ -178,7 +178,7 @@ public class AdminTaskService {
 
         System.out.println(spec);
         Page<Task> taskPage = taskRepository.findAll(spec, pageable);
-        return taskPage.map(taskMapper::toDTO);
+        return taskPage.map(taskMapper::toAdminResponse);
     }
 
 //    //for Users, can get only his own tasks
@@ -268,18 +268,18 @@ public class AdminTaskService {
     }
 
 
-    public Page<TaskDTO> getDeletedTasks(
+    public Page<AdminResponse> getDeletedTasks(
             WorkerDetails workerDetails,
             Pageable pageable) {
 
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             return taskRepository.findByIsDeletedTrue(pageable)
-                    .map(taskMapper::toDTO);
+                    .map(taskMapper::toAdminResponse);
         }
 
         return taskRepository
                 .findByWorkerIdAndIsDeletedTrue(workerDetails.getWorker().getId(), pageable)
-                .map(taskMapper::toDTO);
+                .map(taskMapper::toAdminResponse);
     }
 
 

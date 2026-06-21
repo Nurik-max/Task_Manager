@@ -1,13 +1,13 @@
 package org.example.Task_Manager.Sevice;
 
 import jakarta.transaction.Transactional;
-import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.response.UserResponse;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Model.*;
-import org.example.Task_Manager.Repoitory.TaskMapper;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskMapper;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.TaskSpecifications;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ public class UserTaskService {
 
     //for Users, can get only his own tasks
     @Transactional
-    public Page<TaskDTO> workerListOfTask(
+    public Page<UserResponse> workerListOfTask(
             WorkerDetails workerDetails,
             Status status,
             Priority priority,
@@ -80,10 +80,10 @@ public class UserTaskService {
         }
 
         return taskRepository.findAll(spec, pageable)
-                .map(taskMapper::toDTO);
+                .map(taskMapper::toUserResponse);
     }
 
-    public TaskDTO saveUserTask(CreateTaskRequest request, WorkerDetails workerDetails)
+    public UserResponse saveUserTask(CreateTaskRequest request, WorkerDetails workerDetails)
     {
         // 1. Превращаем DTO в Entity (подготовка к базе)
         Task task = taskMapper.toEntity(request);
@@ -98,10 +98,10 @@ public class UserTaskService {
             task.setWorker(currentWorker);
         }
         taskRepository.save(task);
-        return taskMapper.toDTO(task);
+        return taskMapper.toUserResponse(task);
     }
 
-    public TaskDTO updateUserTask(int taskId, UpdateTaskRequest taskDTO, WorkerDetails workerDetails)
+    public UserResponse updateUserTask(int taskId, UpdateTaskRequest taskDTO, WorkerDetails workerDetails)
     {
 
         Worker currentWorker = workerDetails.getWorker();
@@ -117,7 +117,7 @@ public class UserTaskService {
         //Rewrite all empty variable with old data
         taskMapper.updateTaskForUser(task, taskDTO);
 
-        return taskMapper.toDTO(taskRepository.save(task));
+        return taskMapper.toUserResponse(taskRepository.save(task));
     }
 
 

@@ -1,6 +1,5 @@
-package org.example.Task_Manager.Repoitory;
+package org.example.Task_Manager.Repository;
 
-import org.example.Task_Manager.DTO.TaskDTO;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;

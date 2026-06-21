@@ -2,7 +2,7 @@ package org.example.Task_Manager.Controller;
 
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.junit.jupiter.api.Test;

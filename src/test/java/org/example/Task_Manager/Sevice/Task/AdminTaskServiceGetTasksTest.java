@@ -1,9 +1,9 @@
 package org.example.Task_Manager.Sevice.Task;
 
-import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Model.Task;
-import org.example.Task_Manager.Repoitory.TaskMapper;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskMapper;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,18 +39,18 @@ class AdminTaskServiceGetTasksTest {
         Pageable pageable = PageRequest.of(0, 5);
 
         Task task = new Task();
-        TaskDTO dto = new TaskDTO();
+        AdminResponse dto = new AdminResponse();
 
         Page<Task> taskPage = new PageImpl<>(List.of(task));
 
         when(taskRepository.findAll(any(Specification.class), eq(pageable)))
                 .thenReturn(taskPage);
 
-        when(taskMapper.toDTO(task))
+        when(taskMapper.toAdminResponse(task))
                 .thenReturn(dto);
 
         // Act
-        Page<TaskDTO> result = adminTaskService.getTasks(
+        Page<AdminResponse> result = adminTaskService.getTasks(
                 null, null,null, null, null, null, false, pageable
         );
 
@@ -59,6 +59,6 @@ class AdminTaskServiceGetTasksTest {
         assertEquals(1, result.getContent().size());
 
         verify(taskRepository).findAll( any(Specification.class), eq(pageable));
-        verify(taskMapper).toDTO(task);
+        verify(taskMapper).toAdminResponse(task);
     }
 }

@@ -1,7 +1,7 @@
-package org.example.Task_Manager.Repoitory;
+package org.example.Task_Manager.Repository;
 
-import org.example.Task_Manager.DTO.CreateWorkerDTO;
-import org.example.Task_Manager.DTO.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Model.Worker;

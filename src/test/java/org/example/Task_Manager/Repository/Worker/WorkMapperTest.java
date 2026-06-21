@@ -1,9 +1,7 @@
 package org.example.Task_Manager.Repository.Worker;
 
-import org.example.Task_Manager.DTO.WorkerDTO;
-import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Repoitory.WorkerMapper;
-import org.junit.jupiter.api.Test;
+import org.example.Task_Manager.DTO.workers.WorkerDTO;
+import org.example.Task_Manager.Repository.WorkerMapper;
 import org.mapstruct.factory.Mappers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;

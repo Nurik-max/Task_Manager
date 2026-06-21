@@ -3,11 +3,10 @@ package org.example.Task_Manager.DTO.workers;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
-import org.example.Task_Manager.Model.WorkerStatus;
 
 @Setter
 @Getter
-public class UpdateWorkerDTO {
+public class CreateWorkerDTO {
 
     @NotBlank
     private String username;
@@ -21,7 +20,13 @@ public class UpdateWorkerDTO {
     @NotBlank
     private String email;
 
-    public UpdateWorkerDTO() {
+    @NotBlank
+    private String password;
+
+    @NotBlank
+    private String confirmPassword;
+
+    public CreateWorkerDTO() {
     }
 
 }

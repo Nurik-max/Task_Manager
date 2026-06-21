@@ -60,13 +60,12 @@ public class SecurityConfig {
         http
                 .securityMatcher("/api/**", "/v3/api-docs/**", "/swagger-ui/**")
                 .csrf(csrf -> csrf.disable())
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**"
+                        ).permitAll()
                         .anyRequest().authenticated()
-                )
-                .formLogin(form -> form.disable())
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint(restAuthEntryPoint())
                 );
 
         return http.build();

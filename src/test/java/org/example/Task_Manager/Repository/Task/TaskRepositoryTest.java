@@ -1,9 +1,8 @@
 package org.example.Task_Manager.Repository.Task;
 
-import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.specification.TaskSpecifications;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

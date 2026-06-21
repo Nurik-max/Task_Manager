@@ -1,7 +1,7 @@
 package org.example.Task_Manager.Repository.Task;
 
 import org.example.Task_Manager.Model.Task;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

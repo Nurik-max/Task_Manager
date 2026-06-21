@@ -1,15 +1,17 @@
 package org.example.Task_Manager.Controller;
 
 import jakarta.validation.Valid;
-import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
+import org.example.Task_Manager.DTO.tasks.response.UserResponse;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.UserTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
@@ -80,12 +82,12 @@ public class TaskController {
 // 🔥 Весь твой сложный if-else заменяется одной строчкой!
 
       //For usual task
-      Page<TaskDTO> tasksDTO = adminTaskService.getTasks(statusEnum,priorityEnum ,keyword,username, start, end, isDeleted, pageable);
+      Page<AdminResponse> adminResponses = adminTaskService.getTasks(statusEnum,priorityEnum ,keyword,username, start, end, isDeleted, pageable);
 
 
-        model.addAttribute("tasks", tasksDTO.getContent());
+        model.addAttribute("tasks", adminResponses.getContent());
         model.addAttribute("currentPage", page);
-        model.addAttribute("totalPages", tasksDTO.getTotalPages());
+        model.addAttribute("totalPages", adminResponses.getTotalPages());
         // Прокидываем фильтры обратно в модель, чтобы сохранить их в полях поиска на странице
         model.addAttribute("selectedStatus", status);
         model.addAttribute("keyword", keyword);
@@ -134,7 +136,7 @@ public class TaskController {
             }
         }
 
-        Page<TaskDTO> taskDTOPage = userTaskService.workerListOfTask(workerDetails,statusEnum,priorityEnum ,keyword, start, end, pageable, isDeleted);
+        Page<UserResponse> taskDTOPage = userTaskService.workerListOfTask(workerDetails,statusEnum,priorityEnum ,keyword, start, end, pageable, isDeleted);
 
         model.addAttribute("tasks", taskDTOPage.getContent());
         model.addAttribute("currentPage", page);
@@ -293,7 +295,7 @@ public class TaskController {
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
     public String showTrash(Model model, @PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
         // Вызываем сервис с isDeleted = true
-        Page<TaskDTO> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
+        Page<AdminResponse> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
 
         model.addAttribute("tasks", tasks.getContent());
         model.addAttribute("currentPage", pageable.getPageNumber());

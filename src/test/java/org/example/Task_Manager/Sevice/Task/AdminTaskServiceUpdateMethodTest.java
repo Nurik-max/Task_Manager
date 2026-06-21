@@ -1,7 +1,7 @@
 package org.example.Task_Manager.Sevice.Task;
 
-import org.example.Task_Manager.Repoitory.TaskMapper;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskMapper;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

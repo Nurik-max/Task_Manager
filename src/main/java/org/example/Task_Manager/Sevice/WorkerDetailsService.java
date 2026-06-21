@@ -1,7 +1,7 @@
 package org.example.Task_Manager.Sevice;
 
 import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

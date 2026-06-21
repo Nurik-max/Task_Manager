@@ -1,6 +1,6 @@
 package org.example.Task_Manager.specification;
 
-import org.example.Task_Manager.DTO.TaskDTO;
+import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.Task;

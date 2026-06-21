@@ -2,8 +2,8 @@ package org.example.Task_Manager.Sevice;
 
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Repoitory.TaskRepository;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.TaskRepository;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

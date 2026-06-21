@@ -1,9 +1,8 @@
 package org.example.Task_Manager.Sevice.Task;
-import org.example.Task_Manager.DTO.TaskDTO;
-import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
 import org.example.Task_Manager.Model.Task;
-import org.example.Task_Manager.Repoitory.TaskMapper;
-import org.example.Task_Manager.Repoitory.TaskRepository;
+import org.example.Task_Manager.Repository.TaskMapper;
+import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,7 +31,7 @@ public class AdminTaskServiceSaveMethodTest {
     @Test
     void shouldSaveTask() {
 
-        TaskDTO dto = new TaskDTO();
+        CreateTaskRequest dto = new CreateTaskRequest();
         dto.setDescription("hello");
 
         Task taskEntity = new Task();
@@ -44,7 +43,7 @@ public class AdminTaskServiceSaveMethodTest {
         when(taskRepository.save(any(Task.class))).thenReturn(taskEntity);
 
         // Настройка возврата DTO (если метод saveTask возвращает TaskDTO)
-        when(taskMapper.toDTO(any(Task.class))).thenReturn(dto);
+//        when(taskMapper.toUserResponse(any(Task.class))).thenReturn(dto);
 
         // Вызов метода
 //        TaskDTO savedDto = taskService.saveTask(dto);

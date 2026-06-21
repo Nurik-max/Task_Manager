@@ -1,10 +1,9 @@
 package org.example.Task_Manager.Sevice.Worker;
 
-import org.example.Task_Manager.DTO.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.WorkerDTO;
 import org.example.Task_Manager.Model.Worker;
-import org.example.Task_Manager.Model.WorkerStatus;
-import org.example.Task_Manager.Repoitory.WorkerMapper;
-import org.example.Task_Manager.Repoitory.WorkerRepository;
+import org.example.Task_Manager.Repository.WorkerMapper;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,9 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class WorkerServiceSaveMethodTest {
