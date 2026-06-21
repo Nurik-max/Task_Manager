@@ -6,9 +6,7 @@ import org.example.Task_Manager.DTO.tasks.AdminUpdateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.CreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.UpdateTaskRequest;
 import org.example.Task_Manager.Model.Task;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
@@ -23,12 +21,21 @@ public interface TaskMapper {
     TaskDTO toDTO(Task task);
 
     //for admin
+    @BeanMapping(nullValuePropertyMappingStrategy =
+            NullValuePropertyMappingStrategy.IGNORE)
     void updateTaskForAdmin(@MappingTarget Task task, AdminUpdateTaskRequest request);
 
     //for user
+    @BeanMapping(nullValuePropertyMappingStrategy =
+            NullValuePropertyMappingStrategy.IGNORE)
     void updateTaskForUser(@MappingTarget Task task, UpdateTaskRequest request);
 
     // Перевод из DTO в Entity:
     @Mapping(target = "worker", ignore = true)
-    Task toEntity(AdminCreateTaskRequest request);
+    Task toEntity(CreateTaskRequest request);
+
+    @Mapping(target = "worker", ignore = true)
+    Task adminToEntity(AdminCreateTaskRequest request);
+
+
 }
