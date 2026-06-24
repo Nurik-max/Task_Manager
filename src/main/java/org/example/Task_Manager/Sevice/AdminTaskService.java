@@ -17,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -66,7 +67,6 @@ public class AdminTaskService {
         }
         // 3. Сохраняем и получаем объект с уже проставленным ID
         Task savedTask = taskRepository.save(task);
-        System.out.println(task.getCreatedDate());
         // 4. Возвращаем DTO! (Контроллер увидит готовый объект с ID)
         return taskMapper.toAdminResponse(savedTask);
     }

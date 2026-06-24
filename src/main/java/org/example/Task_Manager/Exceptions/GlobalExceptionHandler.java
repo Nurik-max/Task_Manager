@@ -1,5 +1,7 @@
 package org.example.Task_Manager.Exceptions;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
@@ -23,8 +25,7 @@ public class GlobalExceptionHandler {
     public String handleWorkerNotFound(WorkerNotFoundException ex, Model model){
 
         model.addAttribute("errorCode", "500"); // Добавляем код ошибки
-        model.addAttribute("errorMessage", "Произошла внутренняя ошибка сервера.");
-        return "error/500";
+        return "error/404";
     }
 
 //    @ExceptionHandler(WorkerNotFoundByNameException.class)
@@ -48,22 +49,26 @@ public class GlobalExceptionHandler {
         return "error/500";
     }
 
+    private static final Logger log =
+            LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public String handleAllUncaughtErrors(Exception ex, Model model) {
-        // В консоль выводим реальную ошибку, чтобы ты мог её найти и починить
-        ex.printStackTrace();
+    public String handleAllUncaughtErrors1(Exception ex, Model model) {
+
+        log.error("Unhandled exception", ex);
 
         model.addAttribute("errorCode", "500");
-        model.addAttribute("errorMessage", "Что-то пошло совсем не так. Мы уже разбираемся.");
+        model.addAttribute("errorMessage", "Что-то пошло совсем не так.");
+
         return "error/500";
     }
-
     @ExceptionHandler(ValidationException.class)
     public String handleValidation(ValidationException ex, Model model) {
         model.addAttribute("error", ex.getMessage());
         return "register";
 
     }
+
     }
 
