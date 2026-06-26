@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.mvc;
 
 
 import jakarta.validation.Valid;
