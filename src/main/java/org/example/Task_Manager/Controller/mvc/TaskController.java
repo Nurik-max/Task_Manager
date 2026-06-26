@@ -221,6 +221,12 @@ public class TaskController {
     @GetMapping("/{id}")
     public String showTask(@PathVariable("id") int id, @AuthenticationPrincipal WorkerDetails workerDetails ,Model model){
         model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
+
+        if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
+            model.addAttribute("baseUrl", "/tasks");
+        } else {
+            model.addAttribute("baseUrl", "/tasks/my");
+        }
         return "tasks/view";
     }
 
