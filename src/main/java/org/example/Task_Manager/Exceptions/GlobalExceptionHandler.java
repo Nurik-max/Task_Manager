@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ControllerAdvice(basePackages = "org.example.Task_Manager.Controller.TaskController")
+@ControllerAdvice(basePackages = "org.example.Task_Manager.Controller.mvc")
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(TaskNotFoundException.class)
