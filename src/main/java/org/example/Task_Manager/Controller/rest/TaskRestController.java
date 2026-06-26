@@ -1,5 +1,8 @@
 package org.example.Task_Manager.Controller.rest;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
@@ -138,6 +141,11 @@ public class TaskRestController {
     }
 
     //task hard delete
+    @Operation(summary = "Delete task")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "Task deleted successfully"),
+            @ApiResponse(responseCode = "404", description = "Task not found")
+    })
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> hardDeleteTask(
