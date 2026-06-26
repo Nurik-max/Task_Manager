@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.security;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

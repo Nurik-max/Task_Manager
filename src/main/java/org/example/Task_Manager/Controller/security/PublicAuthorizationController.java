@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.security;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
