@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.rest;
 
 import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.request.AdminCreateTaskRequest;
