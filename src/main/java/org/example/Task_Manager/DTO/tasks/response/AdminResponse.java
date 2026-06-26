@@ -1,5 +1,6 @@
 package org.example.Task_Manager.DTO.tasks.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -26,7 +27,9 @@ public class AdminResponse {
         private Priority priority;
 
         private Integer workerId;
+        @JsonIgnore
         private String workerUsername;
+        @JsonIgnore
         private String workerSurname;
 
         public String getWorkerFullName() {
