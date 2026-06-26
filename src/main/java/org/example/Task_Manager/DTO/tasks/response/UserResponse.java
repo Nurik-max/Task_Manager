@@ -21,6 +21,7 @@ public class UserResponse {
     private Status status;
     private Priority priority;
     private LocalDateTime createdDate;
+    private LocalDateTime updatedDate;
 
     private String workerUsername; // только если это его задача или назначено
 
