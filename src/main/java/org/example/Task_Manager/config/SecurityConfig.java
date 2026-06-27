@@ -66,7 +66,7 @@ public class SecurityConfig {
                         .anyRequest().authenticated()
                 ).exceptionHandling(exception -> exception
                         .authenticationEntryPoint(restAuthEntryPoint())
-                        .accessDeniedHandler(accessDeniedHandler())
+                        .accessDeniedHandler(accessDeniedHandler_REST())
                 );
 
         return http.build();
@@ -82,7 +82,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AccessDeniedHandler accessDeniedHandler() {
+    public AccessDeniedHandler accessDeniedHandler_REST() {
         return (request, response, ex) -> {
             response.setStatus(403);
             response.setContentType("application/json");
@@ -95,4 +95,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler_MVC() {
+        return (request, response, ex) -> {
+            response.setStatus(403);
+            response.setContentType("application/json");
+            response.getWriter().write("""
+            {
+              "error": "ACCESS_DENIED",
+              "message": "Forbidden"
+            }
+        """);
+        };
+    }
 }
