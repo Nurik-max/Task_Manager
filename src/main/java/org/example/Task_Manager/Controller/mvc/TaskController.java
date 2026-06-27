@@ -213,7 +213,7 @@ public class TaskController {
         }
 
         userTaskService.saveUserTask(request,workerDetails);
-        return "redirect:/tasks";
+        return "redirect:/tasks/my";
     }
 
     // 📌 показать задачу
@@ -237,8 +237,11 @@ public class TaskController {
         model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             model.addAttribute("workers", workerRepository.findAll());
+            return "tasks/edit";
         }
-        return "tasks/edit";
+        else {
+            return "tasks/user_edit";
+        }
     }
 
     // 📌 обновление
@@ -257,8 +260,15 @@ public class TaskController {
         return "redirect:/tasks/edit";
     }
 
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/{id}/edit/my")
+//    public String editMyTask(@PathVariable("id") int id,@AuthenticationPrincipal WorkerDetails workerDetails ,Model model){
+//        model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
+//        return "tasks/user_edit";
+//    }
+
     @PreAuthorize("isAuthenticated()") //for USERs
-    @PatchMapping("/{id}/user")
+    @PostMapping("/{id}/user")
     public String updateMyTasks(@PathVariable int id, @ModelAttribute UpdateTaskRequest request,
                                 @AuthenticationPrincipal WorkerDetails workerDetails){
 
