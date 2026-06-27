@@ -46,20 +46,6 @@
                         </select>
                     </div>
 
-                    <div class="mb-4">
-                        <div sec:authorize="hasRole('ADMIN')">
-                            <label class="form-label">Assign to Worker</label>
-                            <select th:field="*{workerId}" class="form-select">
-                                <option value="">Select a worker...</option>
-
-                                <option th:each="worker : ${workers}"
-                                        th:value="${worker.id}"
-                                        th:text="${task.workerFullName}">
-                                </option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="d-flex gap-2">
                         <a th:href="@{/tasks}" class="btn btn-outline-secondary">Cancel</a>
                         <button type="submit" class="btn btn-primary">Update Task</button>
