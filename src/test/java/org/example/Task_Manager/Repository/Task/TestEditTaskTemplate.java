@@ -1,6 +1,6 @@
 package org.example.Task_Manager.Repository.Task;
 
-import org.example.Task_Manager.Controller.TaskController;
+import org.example.Task_Manager.Controller.mvc.TaskController;
 import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.Repository.TaskRepository;
 import org.example.Task_Manager.Repository.WorkerRepository;

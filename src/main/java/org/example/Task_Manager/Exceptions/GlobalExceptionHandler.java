@@ -2,8 +2,10 @@ package org.example.Task_Manager.Exceptions;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Bean;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -64,6 +66,7 @@ public class GlobalExceptionHandler {
 
         return "error/500";
     }
+
     @ExceptionHandler(ValidationException.class)
     public String handleValidation(ValidationException ex, Model model) {
         model.addAttribute("error", ex.getMessage());
