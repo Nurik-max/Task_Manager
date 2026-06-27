@@ -243,7 +243,7 @@ public class TaskController {
 
     // 📌 обновление
     @PreAuthorize("hasRole('ADMIN')") //For ADMIN
-    @PatchMapping("/{id}/admin")
+    @PostMapping("/{id}/admin")
     public String updateTask(
             @PathVariable int id,
             @ModelAttribute AdminUpdateTaskRequest dto,
