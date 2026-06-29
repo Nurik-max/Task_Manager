@@ -90,9 +90,11 @@ public class TaskController {
         model.addAttribute("totalPages", adminResponses.getTotalPages());
         // Прокидываем фильтры обратно в модель, чтобы сохранить их в полях поиска на странице
         model.addAttribute("selectedStatus", status);
+         model.addAttribute("selectedPriority", priority);
         model.addAttribute("keyword", keyword);
         model.addAttribute("username", username);
-        model.addAttribute("createdDate", start);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
 
 
     model.addAttribute("pageTitle", "All Tasks");
@@ -170,8 +172,11 @@ public class TaskController {
         } else {
             model.addAttribute("baseUrl", "/tasks/my");
         }
+        System.out.println(workerDetails.getWorker().getUserRole());
         return "tasks/new";
+
     }
+
 
     // 📌 создание
     @PreAuthorize("hasRole('ADMIN')") //For ADMIN
@@ -186,11 +191,9 @@ public class TaskController {
                 model.addAttribute("workers", workerRepository.findAll());
                 model.addAttribute("baseUrl", "/tasks");
 
-//            System.out.println("POST HIT");
-//            System.out.println("ERRORS = " + bindingResult.hasErrors());
-//            System.out.println("DTO = " + taskDTO);
             return "tasks/new"; // ❗ ВАЖНО: return только тут
         }
+
 
         // ✅ СОХРАНЕНИЕ
         adminTaskService.saveTask(taskDTO, workerDetails);

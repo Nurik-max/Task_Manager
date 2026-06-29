@@ -18,8 +18,8 @@ public interface TaskMapper {
 
     // ADMIN VIEW
     @Mapping(target = "workerId", source = "worker.id")
-    @Mapping(target = "workerUsername", source = "worker.username")
-    @Mapping(target = "workerSurname", source = "worker.surname")
+    @Mapping(target = "username", source = "worker.username")
+    @Mapping(target = "surname", source = "worker.surname")
     AdminResponse toAdminResponse(Task task);
 
     // CREATE

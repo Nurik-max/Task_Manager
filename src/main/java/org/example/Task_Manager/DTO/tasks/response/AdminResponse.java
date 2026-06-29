@@ -27,14 +27,14 @@ public class AdminResponse {
         private Priority priority;
 
         private Integer workerId;
-        @JsonIgnore
-        private String workerUsername;
-        @JsonIgnore
-        private String workerSurname;
+
+        private String username;
+
+        private String surname;
 
         public String getWorkerFullName() {
-                if (workerUsername != null && workerSurname != null) {
-                        return workerUsername + " " + workerSurname;
+                if (username != null && surname != null) {
+                        return username + " " + surname;
                 }
                 return null;
         }
