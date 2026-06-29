@@ -30,7 +30,7 @@
 
                 <div class="mb-3">
                     <label class="text-muted small">Worker:</label>
-                    <p class="fs-5" th:text="${task.workerUsername}">Worker</p>
+                    <p class="fs-5" th:text="${task.workerFullName != null ? task.workerFullName : 'No worker assigned'}">Worker</p>
                 </div>
 
 

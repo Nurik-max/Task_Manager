@@ -162,7 +162,8 @@
 
                     <!-- WORKERS -->
                     <td  th:if="${isAdminPage}"
-                            th:text="${task.workerFullName} ?: 'No worker assigned'"></td>
+                         th:text="${task.workerFullName != null ? task.workerFullName : 'No worker assigned'}">
+                    </td>
 
 
                     <td class="text-end">
