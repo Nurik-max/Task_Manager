@@ -10,7 +10,7 @@ public class AdminCreateTaskRequest {
 
     private String description;
     private Priority priority;
-    private Integer worker_id;
+    private Integer workerId;
 
     public AdminCreateTaskRequest() {
     }

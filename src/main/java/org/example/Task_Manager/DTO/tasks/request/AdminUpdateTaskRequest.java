@@ -12,7 +12,7 @@ public class AdminUpdateTaskRequest {
         private String description;
         private Priority priority;
         private Status status;
-        private Integer updatedWorkerId;
+        private Integer workerId;
 
     public AdminUpdateTaskRequest() {
     }
