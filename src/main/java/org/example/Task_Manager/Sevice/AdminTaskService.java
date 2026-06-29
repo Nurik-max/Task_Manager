@@ -53,16 +53,17 @@ public class AdminTaskService {
             task.setStatus(Status.NEW);
 
 
-        if (taskDTO.getWorker_id() != null) {
+        if (taskDTO.getWorkerId() != null) {
 
             if (!isAdmin) {
                 throw new AccessDeniedException("Only admin can assign tasks");
             }
 
-            Worker worker = workerRepository.findById(taskDTO.getWorker_id())
-                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getWorker_id()));
+            Worker worker = workerRepository.findById(taskDTO.getWorkerId())
+                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getWorkerId()));
 
             task.setWorker(worker);
+
 
         }
         // 3. Сохраняем и получаем объект с уже проставленным ID
@@ -94,14 +95,14 @@ public class AdminTaskService {
         //Rewrite all empty variable with old data
      taskMapper.updateTaskForAdmin(task, taskDTO);
 
-        if (taskDTO.getUpdatedWorkerId() != null) {
+        if (taskDTO.getWorkerId() != null) {
 
             if (!isAdmin) {
                 throw new AccessDeniedException("Only admin can reassign");
             }
 
-            Worker newWorker = workerRepository.findById(taskDTO.getUpdatedWorkerId())
-                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getUpdatedWorkerId()));
+            Worker newWorker = workerRepository.findById(taskDTO.getWorkerId())
+                    .orElseThrow(() -> new WorkerNotFoundException(taskDTO.getWorkerId()));
 
             task.setWorker(newWorker);
         }
