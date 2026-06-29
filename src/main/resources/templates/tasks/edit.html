@@ -47,14 +47,14 @@
                     </div>
 
                     <div class="mb-4">
-                        <div sec:authorize="hasRole('ADMIN')">
+<!--                        <div sec:authorize="hasRole('ADMIN')">-->
                         <label class="form-label">Assign to Worker</label>
                         <select th:field="*{workerId}" class="form-select">
                             <option value="">Select a worker...</option>
 
                             <option th:each="worker : ${workers}"
                                     th:value="${worker.id}"
-                                    th:text="${task.workerFullName}">
+                                    th:text="${worker.username + ' ' + worker.surname}">
                             </option>
                         </select>
                         </div>
