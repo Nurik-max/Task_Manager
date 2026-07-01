@@ -174,66 +174,12 @@ public class AdminTaskService {
             spec = spec.and(TaskSpecifications.hasWorker(username));
         }
 
-//        // Временно замени всё в getTasks на это:
-//        spec = (root, query, cb) -> cb.equal(root.get("status"), Status.NEW);
 
         System.out.println(spec);
         Page<Task> taskPage = taskRepository.findAll(spec, pageable);
         return taskPage.map(taskMapper::toAdminResponse);
     }
 
-//    //for Users, can get only his own tasks
-// @Transactional
-// public Page<TaskDTO> workerListOfTask(
-//         WorkerDetails workerDetails,
-//         Status status,
-//         Priority priority,
-//         String keyword,
-//         LocalDateTime start, LocalDateTime end,
-//         Pageable pageable,
-//         boolean isDeleted) {
-//
-//     Worker currentWorker = workerDetails.getWorker();
-//
-//     Specification<Task> spec =
-//             Specification.where(TaskSpecifications.isDeleted(isDeleted));
-//     //filter for status
-//     if(status != null){
-//         spec = spec.and(TaskSpecifications.hasStatus(status));
-//     }
-//
-//     //filter priority
-//     if(priority != null){
-//         spec = spec.and(TaskSpecifications.hasPriority(priority));
-//     }
-//
-//     //filter for Description
-//     if(keyword != null && !keyword.isBlank()){
-//         spec = spec.and(TaskSpecifications.hasKeyword(keyword));
-//     }
-//
-//
-//     //filter by date
-//     if(start != null){
-//         spec = spec.and(TaskSpecifications.createdAfter(start));
-//     }
-//
-//     if(end != null){
-//         spec = spec.and(TaskSpecifications.createdBefore(end));
-//     }
-//
-//
-//     if (currentWorker.getUserRole() != UserRole.ADMIN) {
-//         spec = spec.and(
-//                 TaskSpecifications.hasWorker(
-//                         currentWorker.getUsername()
-//                 )
-//         );
-//     }
-//
-//     return taskRepository.findAll(spec, pageable)
-//             .map(taskMapper::toDTO);
-// }
  @Transactional
  @PreAuthorize("hasRole('ADMIN')")
     public void taskReassignment(int oldWorkerId, int newWorkerId){
@@ -278,17 +224,46 @@ public class AdminTaskService {
 
 
     public Page<AdminResponse> getDeletedTasks(
-            WorkerDetails workerDetails,
-            Pageable pageable) {
+            Status status, Priority priority, String keyword,
+            LocalDateTime start, LocalDateTime end, boolean isDeleted ,Pageable pageable,
+            WorkerDetails workerDetails ) {
 
-        if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
-            return taskRepository.findByIsDeletedTrue(pageable)
-                    .map(taskMapper::toAdminResponse);
+        Specification<Task> spec = Specification.where(TaskSpecifications.isDeleted(isDeleted));
+
+        //filter for status
+        if(status != null){
+            spec = spec.and(TaskSpecifications.hasStatus(status));
         }
 
-        return taskRepository
-                .findByWorkerIdAndIsDeletedTrue(workerDetails.getWorker().getId(), pageable)
-                .map(taskMapper::toAdminResponse);
+        //filter priority
+        if(priority != null){
+            spec = spec.and(TaskSpecifications.hasPriority(priority));
+        }
+
+        //filter for Description
+        if(keyword != null && !keyword.isBlank()){
+            spec = spec.and(TaskSpecifications.hasKeyword(keyword));
+        }
+
+
+        //filter by date
+        if(start != null){
+            spec = spec.and(TaskSpecifications.createdAfter(start));
+        }
+
+        if(end != null){
+            spec = spec.and(TaskSpecifications.createdBefore(end));
+        }
+
+        if (workerDetails.getWorker().getUserRole() != UserRole.ADMIN) {
+            spec = spec.and(
+                    TaskSpecifications.hasWorker(
+                            workerDetails.getUsername()
+                    )
+            );
+        }
+
+        return taskRepository.findAll(spec, pageable).map(taskMapper::toAdminResponse);
     }
 
 

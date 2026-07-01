@@ -168,10 +168,21 @@ public class TaskRestController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
-    public ResponseEntity<Page<AdminResponse>> showTrash(@PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
-        // Вызываем сервис с isDeleted = true
-        Page<AdminResponse> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
+    public ResponseEntity<Page<AdminResponse>> showTrash(   @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(required = false) Status status,
+                                                            @RequestParam(required = false) Priority priority,
+                                                            @RequestParam(required = false) String keyword,
+                                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                                                            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+                                                            @RequestParam(defaultValue = "true") boolean isDeleted, @AuthenticationPrincipal WorkerDetails workerDetails) {
 
-        return ResponseEntity.ok(tasks); // Убедись, что файл называется trash.html
+        Pageable pageable = PageRequest.of(page,10);
+
+        //For usual task
+        Page<AdminResponse> adminResponses = adminTaskService.getDeletedTasks(status, priority, keyword, start, end, isDeleted, pageable,workerDetails);
+
+        // Вызываем сервис с isDeleted = true
+
+        return ResponseEntity.ok(adminResponses); // Убедись, что файл называется trash.html
     }
 }

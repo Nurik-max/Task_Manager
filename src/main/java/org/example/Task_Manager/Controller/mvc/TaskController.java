@@ -312,13 +312,47 @@ public class TaskController {
     }
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/trash") // URL стал короче, так как @RequestMapping("/tasks") уже есть выше
-    public String showTrash(Model model, @PageableDefault(size = 10) Pageable pageable, @AuthenticationPrincipal WorkerDetails workerDetails) {
+    public String showTrash(   @RequestParam(defaultValue = "0") int page,
+                               @RequestParam(required = false) String status,
+                               @RequestParam(required = false) String priority,
+                               @RequestParam(required = false) String keyword,
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime start,
+                               @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime end,
+                               @RequestParam(defaultValue = "true") boolean isDeleted, @AuthenticationPrincipal WorkerDetails workerDetails, Model model) {
         // Вызываем сервис с isDeleted = true
-        Page<AdminResponse> tasks = adminTaskService.getDeletedTasks(workerDetails, pageable);
+
+        Pageable pageable = PageRequest.of(page,10);
+        Status statusEnum = null;
+        if(status != null && !status.isBlank()){
+            try {
+                statusEnum = Status.valueOf(status.toUpperCase());
+            }catch (IllegalArgumentException e){
+// Если в URL ввели ерунду, просто игнорируем фильтр по статусу
+                System.out.println("value 'Status' equal 'null' or not announced");
+            }
+        }
+        Priority priorityEnum = null;
+        if(priority != null && !priority.isBlank()){
+            try{
+                priorityEnum = Priority.valueOf(priority.toUpperCase());
+            }catch (IllegalArgumentException e){
+                System.out.println("value 'Priority' equal 'null' or not announced");
+            }
+        }
+        Page<AdminResponse> tasks = adminTaskService.getDeletedTasks(statusEnum, priorityEnum, keyword, start, end, isDeleted, pageable,workerDetails);
 
         model.addAttribute("tasks", tasks.getContent());
         model.addAttribute("currentPage", pageable.getPageNumber());
         model.addAttribute("totalPages", tasks.getTotalPages());
+
+        model.addAttribute("selectedStatus", status);
+        model.addAttribute("selectedPriority", priority);
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("start", start);
+        model.addAttribute("end", end);
+
+        model.addAttribute("pageTitle", "Trash");
+
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             model.addAttribute("workers", workerRepository.findAll());
             model.addAttribute("baseUrl", "/tasks");
