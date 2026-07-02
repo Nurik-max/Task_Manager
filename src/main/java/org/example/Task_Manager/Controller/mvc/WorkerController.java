@@ -44,7 +44,7 @@ public class WorkerController {
 
 
     @GetMapping
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String listWorkers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String name,
@@ -105,52 +105,6 @@ public class WorkerController {
         return "workers/edit"; // Открывает файл edit.html
     }
 
-    @PostMapping("/{id}/edit")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
-   public String updateWorker(@ModelAttribute("worker")  @Valid UpdateWorkerDTO updateWorkerDTO,
-                              BindingResult bindingResult, @PathVariable("id") int id){
-        System.out.println("UPDATE HIT");
-        System.out.println(bindingResult.getAllErrors());
-        if(bindingResult.hasErrors()){
-            return "workers/edit";
-        }
-
-        workerService.updateWorker(id, updateWorkerDTO);
-        return "redirect:/workers";
-   }
-    @GetMapping("/change-password")
-    public String getChangePasswordPage(Model model) {
-
-        model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
-
-        return "workers/change-password";
-    }
-
-    @PostMapping("/change-password")
-    public String changePassword(
-            @AuthenticationPrincipal WorkerDetails workerDetails,
-            @ModelAttribute("changePasswordDTO") @Valid ChangePasswordDTO dto,
-            BindingResult result,
-            Model model) {
-
-        if (result.hasErrors()) {
-            return "workers/change-password";
-        }
-
-        try {
-            workerService.changePassword(dto, workerDetails);
-
-            model.addAttribute("success", "Password changed successfully");
-
-        } catch (RuntimeException e) {
-
-            model.addAttribute("error", e.getMessage());
-
-            return "workers/change-password";
-        }
-
-        return "redirect:/workers";
-    }
     @GetMapping("/trash")
     public String showTrash(Model model, Pageable pageable) {
         // Используем нашу новую спецификацию
