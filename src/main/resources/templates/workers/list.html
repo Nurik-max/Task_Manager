@@ -1,42 +1,334 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+
 <head>
     <meta charset="UTF-8">
-    <title>Workers List</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Task Manager</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .task-container { background: white; padding: 30px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* Кастомные цвета для статусов, если не хочешь стандартные Bootstrap */
+        .status-done { background-color: #d4edda; color: #155724; }
+        .status-progress { background-color: #fff3cd; color: #856404; }
+        .status-new { background-color: #e2e3e5; color: #383d41; }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 </head>
+
 <body>
-<div class="container mt-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Workers Directory</h1>
-        <a href="/workers/new" class="btn btn-primary">➕ Add Worker</a>
-    </div>
+<div class="container">
+    <div class="task-container shadow-sm">
+        <div class="d-flex justify-content-between align-items-center mb-4">
 
-    <table class="table table-hover shadow-sm bg-white rounded">
-        <thead class="table-light">
-        <tr>
-            <th>Name</th>
-            <th>Surname</th>
-            <th>Position</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="worker : ${workers}">
-            <td th:text="${worker.username}">Name</td>
-            <td th:text="${worker.surname}">Surname</td>
-            <td th:text="${worker.position}">Position</td>
-            <td>
-                <a th:href="@{/workers/{id}/edit(id=${worker.id})}" class="btn btn-sm btn-outline-warning">Edit</a>
+            <h1 class="h2 fw-bold">
+                <span class="text-primary">👥</span> Workers Directory
+            </h1>
 
-                <form th:action="@{/workers/{id}/delete(id=${worker.id})}" th:method="post" style="display:inline;">
-                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+            <div class="d-flex gap-2">
+
+                <a th:href="@{/workers/trash}"
+                   class="btn btn-outline-secondary">
+                    🗑 Trash
+                </a>
+
+                <a th:href="@{/workers/new}"
+                   class="btn btn-success">
+                    ➕ Add Worker
+                </a>
+
+                <a href="/tasks"
+                   class="btn btn-outline-primary">
+                    📋 Tasks
+                </a>
+
+                <form th:action="@{/logout}" method="post">
+
+                    <button class="btn btn-outline-danger">
+                        🚪 Logout
+                    </button>
+
                 </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
-    <a href="/tasks" class="btn btn-link">Back to Tasks</a>
+
+            </div>
+
+        </div>
+
+        <!-- ================= FILTERS ================= -->
+
+        <div class="card mb-4 shadow-sm border-0">
+
+            <div class="card-body bg-light">
+
+                <form th:action="@{/workers}"
+                      method="get"
+                      class="row g-2 align-items-end">
+
+                    <!-- Username -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label small text-muted">
+                            👤 Username
+                        </label>
+
+                        <input class="form-control form-control-sm"
+                               name="username"
+                               th:value="${username}"
+                               placeholder="Search username...">
+
+                    </div>
+
+                    <!-- Surname -->
+
+                    <div class="col-md-3">
+
+                        <label class="form-label small text-muted">
+                            🪪 Surname
+                        </label>
+
+                        <input class="form-control form-control-sm"
+                               name="surname"
+                               th:value="${surname}"
+                               placeholder="Search surname...">
+
+                    </div>
+
+                    <!-- Position -->
+
+                    <div class="col-md-2">
+
+                        <label class="form-label small text-muted">
+                            💼 Position
+                        </label>
+
+                        <input class="form-control form-control-sm"
+                               name="position"
+                               th:value="${position}"
+                               placeholder="Developer">
+
+                    </div>
+
+                    <!-- Buttons -->
+
+                    <div class="col-md-3 d-flex gap-1">
+
+                        <button class="btn btn-primary btn-sm flex-grow-1">
+                            🔍 Filter
+                        </button>
+
+                        <a href="/workers"
+                           class="btn btn-outline-secondary btn-sm">
+                            ♻ Reset
+                        </a>
+
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+        <!-- ================= TABLE ================= -->
+
+        <div class="table-responsive">
+
+            <table class="table table-hover align-middle">
+
+                <thead class="table-primary">
+
+                <tr>
+
+                    <th>👤 Username</th>
+
+                    <th>🪪 Surname</th>
+
+                    <th>📅 Created</th>
+
+                    <th>📧 Email</th>
+
+                    <th>💼 Position</th>
+
+                    <th class="text-end">⚙ Actions</th>
+
+                </tr>
+
+                </thead>
+
+                <tbody>
+
+                <tr th:each="worker : ${workers}">
+
+                    <!-- Username -->
+
+                    <td>
+
+                        <a th:href="@{/workers/{id}/edit(id=${worker.id})}"
+                           class="text-decoration-none fw-semibold text-primary"
+                           th:text="${worker.username}">
+                        </a>
+
+                    </td>
+
+                    <!-- Surname -->
+
+                    <td th:text="${worker.surname}"></td>
+
+                    <!-- Created -->
+
+                    <td>
+
+                        <span class="text-muted small"
+                              th:text="${#temporals.format(worker.createdDate,'yyyy-MM-dd HH:mm')}">
+                        </span>
+
+                    </td>
+
+                    <!-- Email -->
+
+                    <td>
+
+                        <span class="text-muted"
+                              th:text="${worker.email}">
+                        </span>
+
+                    </td>
+
+                    <!-- Position -->
+
+                    <td>
+
+                        <span class="badge bg-info text-dark"
+                              th:text="${worker.position}">
+                        </span>
+
+                    </td>
+
+                    <!-- Actions -->
+
+                    <td class="text-end">
+
+                        <div class="btn-group btn-group-sm">
+
+                            <a th:href="@{/workers/{id}/edit(id=${worker.id})}"
+                               class="btn btn-outline-primary">
+
+                                ✏ Edit
+
+                            </a>
+
+                            <form th:action="@{/workers/{id}/delete(id=${worker.id})}"
+                                  method="post">
+
+                                <button class="btn btn-danger"
+                                        onclick="return confirm('Delete this worker?')">
+
+                                    🗑
+
+                                </button>
+
+                            </form>
+
+                        </div>
+
+                    </td>
+
+                </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+        <!-- ================= PAGINATION ================= -->
+
+        <nav th:if="${totalPages > 0}">
+
+            <ul class="pagination justify-content-center">
+
+                <li class="page-item"
+                    th:classappend="${currentPage==0} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{'/workers?page=' + (${currentPage}-1)
+                       + '&username=' + ${username}
+                       + '&surname=' + ${surname}
+                       + '&position=' + ${position}}">
+                        Previous
+                    </a>
+
+                </li>
+
+                <li class="page-item"
+                    th:each="i : ${#numbers.sequence(0,totalPages-1)}"
+                    th:classappend="${i==currentPage} ? 'active'">
+
+                    <a class="page-link"
+                       th:text="${i+1}"
+                       th:href="@{'/workers?page=' + ${i}
+                       + '&username=' + ${username}
+                       + '&surname=' + ${surname}
+                       + '&position=' + ${position}}">
+                    </a>
+
+                </li>
+
+                <li class="page-item"
+                    th:classappend="${currentPage==totalPages-1} ? 'disabled'">
+
+                    <a class="page-link"
+                       th:href="@{'/workers?page=' + (${currentPage}+1)
+                       + '&username=' + ${username}
+                       + '&surname=' + ${surname}
+                       + '&position=' + ${position}}">
+                        Next
+                    </a>
+
+                </li>
+
+            </ul>
+
+        </nav>
+
+        <!-- ================= EMPTY ================= -->
+
+        <div th:if="${workers.empty}" class="text-center py-5">
+
+            <div style="font-size:70px">
+                👥
+            </div>
+
+            <h4 class="text-muted mt-3">
+                No workers found
+            </h4>
+
+            <p class="text-secondary">
+                Try changing the filters or add a new employee.
+            </p>
+
+            <a th:href="@{/workers/new}"
+               class="btn btn-success">
+
+                ➕ Add First Worker
+
+            </a>
+
+        </div>
+
+    </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
 </body>
 </html>
