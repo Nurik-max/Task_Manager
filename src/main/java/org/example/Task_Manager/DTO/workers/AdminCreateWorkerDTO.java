@@ -9,6 +9,8 @@ import lombok.Setter;
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.WorkerStatus;
 
+import java.time.LocalDateTime;
+
 @Setter
 @Getter
 public class AdminCreateWorkerDTO {
@@ -31,6 +33,7 @@ public class AdminCreateWorkerDTO {
     @Enumerated(EnumType.STRING)
     private UserRole userRole;
 
+    private LocalDateTime createdAt;
 
     public AdminCreateWorkerDTO() {
     }

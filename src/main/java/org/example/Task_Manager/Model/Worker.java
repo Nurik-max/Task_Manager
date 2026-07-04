@@ -5,8 +5,10 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.boot.model.source.internal.hbm.AttributesHelper;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Setter
@@ -46,6 +48,11 @@ public class Worker {
 
     @Enumerated(EnumType.STRING)
     private WorkerStatus workerStatus;
+
+    @CreationTimestamp
+    private LocalDateTime createdDate;
+
+    private LocalDateTime deletedAt;
 
     public Worker(String username, String surname, String email, String password, UserRole userRole, String position) {
         this.username = username;
