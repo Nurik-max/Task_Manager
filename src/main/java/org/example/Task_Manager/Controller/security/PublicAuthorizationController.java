@@ -2,7 +2,7 @@ package org.example.Task_Manager.Controller.security;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
-import org.example.Task_Manager.DTO.workers.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
