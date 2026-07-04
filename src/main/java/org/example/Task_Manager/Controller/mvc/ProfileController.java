@@ -2,7 +2,7 @@ package org.example.Task_Manager.Controller.mvc;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
-import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +20,9 @@ public class ProfileController {
 
 private WorkerService workerService;
 
+/*TODO LIST: make templates for them
+   - make profileDTO for profile
+   - make updateProfile for profile*/
 
 public  ProfileController(WorkerService workerService) {
     this.workerService = workerService;
@@ -42,17 +45,14 @@ public  ProfileController(WorkerService workerService) {
     @PostMapping
     public String update(
             @AuthenticationPrincipal WorkerDetails workerDetails,
-            @ModelAttribute @Valid UpdateWorkerDTO dto,
+            @ModelAttribute @Valid ProfileUpdateDTO dto,
             BindingResult result) {
 
         if(result.hasErrors()){
             return "profile/profile";
         }
 
-        workerService.updateWorker(
-                workerDetails.getWorker().getId(),
-                dto
-        );
+        workerService.updateProfile(workerDetails.getWorker().getId(), dto);
 
         return "redirect:/profile";
     }
@@ -62,7 +62,7 @@ public  ProfileController(WorkerService workerService) {
 
         model.addAttribute("changePasswordDTO", new ChangePasswordDTO());
 
-        return "workers/change-password";
+        return "profile/change-password";
     }
 
     @PostMapping("/change-password")
@@ -73,7 +73,7 @@ public  ProfileController(WorkerService workerService) {
             Model model) {
 
         if (result.hasErrors()) {
-            return "workers/change-password";
+            return "profile/change-password";
         }
 
         try {
@@ -85,10 +85,10 @@ public  ProfileController(WorkerService workerService) {
 
             model.addAttribute("error", e.getMessage());
 
-            return "workers/change-password";
+            return "profile/change-password";
         }
 
-        return "redirect:/workers";
+        return "redirect:/profile";
     }
 
 }
