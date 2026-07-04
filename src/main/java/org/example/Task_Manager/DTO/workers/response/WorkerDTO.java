@@ -26,7 +26,6 @@
 
         private String email;
 
-        @CreationTimestamp
         private LocalDateTime createdDate;
 
 
