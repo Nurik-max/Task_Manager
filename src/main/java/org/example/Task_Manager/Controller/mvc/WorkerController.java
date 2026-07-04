@@ -4,12 +4,14 @@ package org.example.Task_Manager.Controller.mvc;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
+import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Model.WorkerStatus;
+import org.example.Task_Manager.Repository.WorkerMapper;
 import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.WorkerService;
@@ -33,11 +35,13 @@ import java.util.List;
 public class WorkerController {
 
     private final WorkerService workerService;
+    private  final WorkerMapper workerMapper;
     private final WorkerRepository workerRepository;
     private final AdminTaskService adminTaskService;
 
-    public WorkerController(WorkerService workerService, WorkerRepository workerRepository, AdminTaskService adminTaskService) {
+    public WorkerController(WorkerService workerService, WorkerMapper workerMapper, WorkerRepository workerRepository, AdminTaskService adminTaskService) {
         this.workerService = workerService;
+        this.workerMapper = workerMapper;
         this.workerRepository = workerRepository;
         this.adminTaskService = adminTaskService;
     }
@@ -117,7 +121,8 @@ public class WorkerController {
     public String showTrash(Model model, Pageable pageable) {
         // Используем нашу новую спецификацию
         Page<Worker> firedWorkers = workerRepository.findAll(WorkerSpecification.isFired(), pageable);
-        model.addAttribute("workers", firedWorkers);
+        Page<AdminWorkerResponse> workers = firedWorkers.map(workerMapper::toAdminWorkerResponse);
+        model.addAttribute("workers", workers);
         return "workers/trash"; // Путь к твоему новому HTML-файлу
     }
 
