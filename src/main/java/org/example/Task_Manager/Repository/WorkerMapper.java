@@ -1,6 +1,7 @@
 package org.example.Task_Manager.Repository;
 
 import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
@@ -16,10 +17,14 @@ public interface WorkerMapper {
     Worker toEntity(CreateWorkerDTO dto);
 
 //    @Mapping(source = "userRole", target = "userRole")
-@Mapping(target = "workerStatus", constant = "WORKS")
+    @Mapping(target = "workerStatus", constant = "WORKS")
     Worker adminCreateWorkerFromDTO(AdminCreateWorkerDTO dto);
 
-    WorkerDTO toDTO(Worker worker);
+    //Response for Admin
+    AdminWorkerResponse toAdminWorkerResponse(Worker worker);
+
+    //Response for Users
+    WorkerDTO toUserResponse(Worker worker);
 
     @BeanMapping(
             nullValuePropertyMappingStrategy =
