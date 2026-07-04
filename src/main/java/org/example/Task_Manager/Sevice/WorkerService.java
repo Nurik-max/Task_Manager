@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
@@ -14,6 +15,8 @@ import org.example.Task_Manager.Repository.WorkerMapper;
 import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.WorkerSpecification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,6 +42,10 @@ public class WorkerService {
 
     @Autowired
     private final AdminTaskService adminTaskService;
+
+    private static final Logger log = LoggerFactory.getLogger(WorkerService.class);
+
+
 
 
     public WorkerService(WorkerMapper workerMapper, BCryptPasswordEncoder passwordEncoder, WorkerRepository workerRepository, AdminTaskService adminTaskService) {
@@ -68,47 +75,50 @@ public class WorkerService {
     }
 
 @Transactional //Method for admin
-    public void createWorker(AdminCreateWorkerDTO adminCreateWorkerDTO) {
-        adminCreateWorkerDTO.setCreatedAt(LocalDateTime.now());
+    public AdminWorkerResponse createWorker(AdminCreateWorkerDTO adminCreateWorkerDTO) {
         Worker worker = workerMapper.adminCreateWorkerFromDTO(adminCreateWorkerDTO);
-
-    worker.setPassword(passwordEncoder.encode(adminCreateWorkerDTO.getPassword()));
-        workerRepository.save(worker);
+         worker.setPassword(passwordEncoder.encode(adminCreateWorkerDTO.getPassword()));
+         worker.setCreatedDate(LocalDateTime.now());
+       Worker savedWorker =  workerRepository.save(worker);
+       return workerMapper.toAdminWorkerResponse(savedWorker);
     }
 
 
 @Transactional
-    public Worker updateWorker(int id, UpdateWorkerDTO updateWorkerDTO){
+    public AdminWorkerResponse updateWorker(int id, UpdateWorkerDTO updateWorkerDTO){
 
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 
         workerMapper.updateWorkerFromDTO(updateWorkerDTO, existingWorker);
-        return existingWorker;
+
+        Worker updatedWorker = workerRepository.save(existingWorker);
+        return workerMapper.toAdminWorkerResponse(updatedWorker);
     }
 
     @Transactional
-    public Worker updateProfile(int id, ProfileUpdateDTO profileUpdateDTO) {
+    public WorkerDTO updateProfile(int id, ProfileUpdateDTO profileUpdateDTO) {
 
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
         workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
-        return existingWorker;
+        Worker updatedWorker = workerRepository.save(existingWorker);
+        return workerMapper.toUserResponse(updatedWorker);
     }
 
     public WorkerDTO showWorker(int id){
        Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 //       List<Task> workerListOfTask = taskService.workerListOfTask(id);
-       return workerMapper.toDTO(worker);
+       return workerMapper.toUserResponse(worker);
     }
 
     @Transactional
-    public void softDeleteWorker(int id){
-
+    public AdminWorkerResponse softDeleteWorker(int id){
         Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
         worker.setWorkerStatus(WorkerStatus.FIRED);
+        return workerMapper.toAdminWorkerResponse(worker);
     }
 
     @Transactional
-    public void hardDeleteWorker(int id, Integer newWorkerId) {
+    public AdminWorkerResponse hardDeleteWorker(int id, Integer newWorkerId) {
         // 1. Проверяем: если новый ID передан, он не должен совпадать с удаляемым
         if (newWorkerId != null && id == newWorkerId) {
             throw new IllegalArgumentException("Нельзя переназначить задачи самому себе!");
@@ -125,7 +135,8 @@ public class WorkerService {
 
         // 4. Удаляем работника
         workerRepository.delete(worker);
-        System.out.println(">>> Удаляю worker: " + id);
+        log.info("Worker deleted successfully: {}", id);
+        return workerMapper.toAdminWorkerResponse(worker);
     }
 
 
@@ -168,12 +179,13 @@ public class WorkerService {
         return dto;
     }
     @Transactional
-    public void restoreWorker(int id) {
+    public AdminWorkerResponse restoreWorker(int id) {
         Worker worker = workerRepository.findById(id)
                 .orElseThrow(() -> new WorkerNotFoundException(id));
 
         worker.setWorkerStatus(WorkerStatus.WORKS); // Возвращаем статус
-        // save() не обязателен, если есть @Transactional
+
+        return workerMapper.toAdminWorkerResponse(worker);
     }
 
     @Transactional
