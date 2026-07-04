@@ -4,8 +4,9 @@ import jakarta.transaction.Transactional;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.CreateWorkerDTO;
-import org.example.Task_Manager.DTO.workers.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
+import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
 import org.example.Task_Manager.Exceptions.ValidationException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.*;
@@ -20,6 +21,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -56,6 +58,7 @@ public class WorkerService {
         if (workerRepository.existsWorkerByUsername(dto.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
+
        Worker worker = workerMapper.toEntity(dto);
 //        worker.setUserRole(UserRole.USER);
 //        worker.setWorkerStatus(WorkerStatus.WORKS);
@@ -66,6 +69,7 @@ public class WorkerService {
 
 @Transactional //Method for admin
     public void createWorker(AdminCreateWorkerDTO adminCreateWorkerDTO) {
+        adminCreateWorkerDTO.setCreatedAt(LocalDateTime.now());
         Worker worker = workerMapper.adminCreateWorkerFromDTO(adminCreateWorkerDTO);
 
     worker.setPassword(passwordEncoder.encode(adminCreateWorkerDTO.getPassword()));
@@ -79,6 +83,14 @@ public class WorkerService {
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 
         workerMapper.updateWorkerFromDTO(updateWorkerDTO, existingWorker);
+        return existingWorker;
+    }
+
+    @Transactional
+    public Worker updateProfile(int id, ProfileUpdateDTO profileUpdateDTO) {
+
+        Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
+        workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
         return existingWorker;
     }
 
@@ -117,14 +129,14 @@ public class WorkerService {
     }
 
 
-    public Page<WorkerDTO> getWorkers(String name, String surname, String position, WorkerStatus workerStatus, Pageable pageable) {
+    public Page<WorkerDTO> getWorkers(String username, String surname,String position, WorkerStatus workerStatus, Pageable pageable) {
 
         // 1. Начинаем с базового условия (исключаем уволенных)
         Specification<Worker> spec = Specification.where(WorkerSpecification.isNotFired());
 
         // 2. Динамически добавляем фильтры, если они переданы
-        if (name != null && !name.isBlank()) {
-            spec = spec.and(WorkerSpecification.hasName(name));
+        if (username != null && !username.isBlank()) {
+            spec = spec.and(WorkerSpecification.hasName(username));
         }
         if (surname != null && !surname.isBlank()) {
             spec = spec.and(WorkerSpecification.hasSurname(surname));
