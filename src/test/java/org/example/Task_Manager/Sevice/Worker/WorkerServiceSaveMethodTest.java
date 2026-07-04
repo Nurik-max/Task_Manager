@@ -1,6 +1,6 @@
 package org.example.Task_Manager.Sevice.Worker;
 
-import org.example.Task_Manager.DTO.workers.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Repository.WorkerMapper;
 import org.example.Task_Manager.Repository.WorkerRepository;

@@ -4,7 +4,7 @@ package org.example.Task_Manager.Controller.mvc;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
-import org.example.Task_Manager.DTO.workers.WorkerDTO;
+import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
@@ -47,7 +47,7 @@ public class WorkerController {
     @PreAuthorize("hasRole('ADMIN')")
     public String listWorkers(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String  username,
             @RequestParam(required = false) String surname,
             @RequestParam(required = false) String position,
             @RequestParam(required = false) String status, // Принимаем как String
@@ -67,7 +67,7 @@ public class WorkerController {
         }
 
         // 3. Вызываем сервис (метод должен возвращать Page<WorkerDTO>)
-        Page<WorkerDTO> workersPage = workerService.getWorkers(name, surname, position, statusEnum, pageable);
+        Page<WorkerDTO> workersPage = workerService.getWorkers(username, surname, position, statusEnum, pageable);
 
         // 4. Добавляем данные в модель для отображения
         model.addAttribute("workers", workersPage.getContent());
@@ -75,7 +75,7 @@ public class WorkerController {
         model.addAttribute("totalPages", workersPage.getTotalPages());
 
         // 5. Прокидываем фильтры обратно, чтобы в input-полях формы оставались введенные значения
-        model.addAttribute("name", name);
+        model.addAttribute("name", username);
         model.addAttribute("surname", surname);
         model.addAttribute("position", position);
         model.addAttribute("selectedStatus", status);
@@ -105,6 +105,14 @@ public class WorkerController {
         return "workers/edit"; // Открывает файл edit.html
     }
 
+    @PostMapping("/{id}/edit")
+    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    public String update(@PathVariable("id") int id, @ModelAttribute("worker")UpdateWorkerDTO workerUpdateDTO) {
+        workerService.updateWorker(id, workerUpdateDTO);
+        return "redirect:/workers";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/trash")
     public String showTrash(Model model, Pageable pageable) {
         // Используем нашу новую спецификацию
@@ -117,9 +125,7 @@ public class WorkerController {
     @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public String softDeleteWorker(@PathVariable("id") int id){
         Worker worker = workerRepository.findById(id).orElseThrow(()-> new WorkerNotFoundException(id));
-        worker.setWorkerStatus(WorkerStatus.FIRED);
         workerService.softDeleteWorker(id);
-        workerRepository.save(worker);
         return "redirect:/workers";
     }
     // Измени @GetMapping на @DeleteMapping

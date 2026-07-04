@@ -1,6 +1,6 @@
 package org.example.Task_Manager.Repository.Worker;
 
-import org.example.Task_Manager.DTO.workers.WorkerDTO;
+
 import org.example.Task_Manager.Repository.WorkerMapper;
 import org.mapstruct.factory.Mappers;
 

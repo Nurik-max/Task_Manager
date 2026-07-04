@@ -13,7 +13,7 @@ public class WorkerSpecification {
 
     // Поиск по части имени (like)
     public static Specification<Worker> hasName(String name) {
-        return (root, query, cb) -> cb.like(cb.lower(root.get("name")), "%" + name.toLowerCase() + "%");
+        return (root, query, cb) -> cb.like(cb.lower(root.get("username")), "%" + name.toLowerCase() + "%");
     }
 
     // Поиск по части фамилии (like)
