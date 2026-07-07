@@ -33,7 +33,7 @@ public class WorkerRestController {
 
     @GetMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Page<WorkerDTO>> listWorkers(
+    public ResponseEntity<Page<AdminWorkerResponse>> listWorkers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(required = false) String  username,
             @RequestParam(required = false) String surname,
@@ -54,7 +54,7 @@ public class WorkerRestController {
         }
 
         // 3. Вызываем сервис (метод должен возвращать Page<WorkerDTO>)
-        Page<WorkerDTO> workersPage = workerService.getWorkers(username, surname, position, statusEnum, pageable);
+        Page<AdminWorkerResponse> workersPage = workerService.getWorkers(username, surname, position, statusEnum, pageable);
 
 
         return ResponseEntity.ok(workersPage); // Путь к твоему HTML-файлу со списком
@@ -64,6 +64,9 @@ public class WorkerRestController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> create(@RequestBody AdminCreateWorkerDTO adminCreateWorkerDTO) {
       AdminWorkerResponse savedWorker =  workerService.createWorker(adminCreateWorkerDTO);
+        System.out.println(savedWorker.getCreatedAt());
+        System.out.println(savedWorker.getEmail());
+        System.out.println(savedWorker.getId());
         return ResponseEntity.ok(savedWorker);
     }
 
