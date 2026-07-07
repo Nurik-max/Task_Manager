@@ -71,7 +71,7 @@ public class WorkerController {
         }
 
         // 3. Вызываем сервис (метод должен возвращать Page<WorkerDTO>)
-        Page<WorkerDTO> workersPage = workerService.getWorkers(username, surname, position, statusEnum, pageable);
+        Page<AdminWorkerResponse> workersPage = workerService.getWorkers(username, surname, position, statusEnum, pageable);
 
         // 4. Добавляем данные в модель для отображения
         model.addAttribute("workers", workersPage.getContent());
