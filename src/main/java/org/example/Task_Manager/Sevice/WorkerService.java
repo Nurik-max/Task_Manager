@@ -80,6 +80,9 @@ public class WorkerService {
          worker.setPassword(passwordEncoder.encode(adminCreateWorkerDTO.getPassword()));
          worker.setCreatedDate(LocalDateTime.now());
        Worker savedWorker =  workerRepository.save(worker);
+
+    System.out.println(adminCreateWorkerDTO.getEmail());
+    System.out.println(adminCreateWorkerDTO.getCreatedAt());
        return workerMapper.toAdminWorkerResponse(savedWorker);
     }
 
@@ -140,7 +143,7 @@ public class WorkerService {
     }
 
 
-    public Page<WorkerDTO> getWorkers(String username, String surname,String position, WorkerStatus workerStatus, Pageable pageable) {
+    public Page<AdminWorkerResponse> getWorkers(String username, String surname,String position, WorkerStatus workerStatus, Pageable pageable) {
 
         // 1. Начинаем с базового условия (исключаем уволенных)
         Specification<Worker> spec = Specification.where(WorkerSpecification.isNotFired());
@@ -165,7 +168,7 @@ public class WorkerService {
         Page<Worker> workerPage = workerRepository.findAll(spec, pageable);
 
         // 4. Преобразуем Page<Worker> в Page<WorkerDTO>
-        return workerPage.map(this::convertToDTO);
+        return workerPage.map(workerMapper::toAdminWorkerResponse);
     }
 
     // Вспомогательный метод для маппинга
