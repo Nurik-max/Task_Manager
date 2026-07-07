@@ -21,6 +21,8 @@ public interface WorkerMapper {
     Worker adminCreateWorkerFromDTO(AdminCreateWorkerDTO dto);
 
     //Response for Admin
+    @Mapping(target = "id", source = "worker.id")
+    @Mapping(target = "createdAt", source = "worker.createdDate")
     AdminWorkerResponse toAdminWorkerResponse(Worker worker);
 
     //Response for Users
