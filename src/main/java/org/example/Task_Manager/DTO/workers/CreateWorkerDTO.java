@@ -22,11 +22,14 @@ public class CreateWorkerDTO {
     @NotBlank
     private String email;
 
+    private String phone;
+
     @NotBlank
     private String password;
 
     @NotBlank
     private String confirmPassword;
+
 
     private LocalDateTime createdAt;
 

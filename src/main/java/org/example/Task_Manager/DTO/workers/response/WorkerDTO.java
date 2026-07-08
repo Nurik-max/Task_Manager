@@ -1,6 +1,7 @@
     package org.example.Task_Manager.DTO.workers.response;
 
     import lombok.Getter;
+    import lombok.NoArgsConstructor;
     import lombok.Setter;
     import org.example.Task_Manager.Model.WorkerStatus;
     import org.hibernate.annotations.CreationTimestamp;
@@ -10,6 +11,7 @@
 
     @Getter
     @Setter
+    @NoArgsConstructor
     public class WorkerDTO {
 
 
@@ -26,21 +28,13 @@
 
         private String email;
 
+        private String phone;
+
         private LocalDateTime createdDate;
 
 
-        public WorkerDTO(String username, String surname ,String position, String email) {
-            this.username = username;
-            this.surname = surname;
-            this.position = position;
-            this.email = email;
-            this.createdDate = LocalDateTime.now();
 
-        }
 
-        public WorkerDTO() {
-
-        }
 
 
 
