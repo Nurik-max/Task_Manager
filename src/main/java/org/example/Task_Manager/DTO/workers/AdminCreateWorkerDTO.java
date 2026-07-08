@@ -27,6 +27,8 @@ public class AdminCreateWorkerDTO {
     @NotBlank
     private String email;
 
+    private String phone;
+
     @NotBlank
     private String password;
 
