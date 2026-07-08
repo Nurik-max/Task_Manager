@@ -28,7 +28,7 @@ public class PublicAuthorizationController {
 
     @GetMapping("/register")
     public String getRegistrationPage(Model model){
-        model.addAttribute("worker", new WorkerDTO());
+        model.addAttribute("worker", new CreateWorkerDTO());
         return "authorization/register";
     }
 
