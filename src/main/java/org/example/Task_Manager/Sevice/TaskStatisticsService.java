@@ -13,6 +13,10 @@ public class TaskStatisticsService {
 
     private TaskRepository taskRepository;
 
+    public TaskStatisticsService(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
+
     public long countTotalTasks(int workerId) {
 
         List<Task> totalTasks = taskRepository.findByWorker_Id(workerId);
