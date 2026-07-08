@@ -3,6 +3,7 @@ package org.example.Task_Manager.Controller.mvc;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
+import org.example.Task_Manager.Sevice.TaskStatisticsService;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,13 +20,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProfileController {
 
 private WorkerService workerService;
-
+private TaskStatisticsService taskStatisticsService;
 /*TODO LIST: make templates for them
    - make profileDTO for profile
    - make updateProfile for profile*/
 
-public  ProfileController(WorkerService workerService) {
+public  ProfileController(WorkerService workerService, TaskStatisticsService taskStatisticsService) {
     this.workerService = workerService;
+    this.taskStatisticsService = taskStatisticsService;
 }
 
     @GetMapping
@@ -36,6 +38,9 @@ public  ProfileController(WorkerService workerService) {
         model.addAttribute(
                 "worker",
                 workerService.showWorker(workerDetails.getWorker().getId())
+        );
+        model.addAttribute(
+                "statistics", taskStatisticsService.getStatistics(workerDetails.getWorker().getId())
         );
 
         return "profile/profile";
