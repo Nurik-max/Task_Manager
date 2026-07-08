@@ -1,0 +1,155 @@
+<div class="container">
+    <div class="task-container shadow-sm">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2">👤 My Profile</h1>
+
+            <div class="d-flex gap-2">
+                <a th:href="@{/tasks}" class="btn btn-outline-secondary">
+                    ← Back to Tasks
+                </a>
+
+                <a th:href="@{/profile/edit}" class="btn btn-primary">
+                    ✏ Edit Profile
+                </a>
+            </div>
+        </div>
+
+        <!-- Profile Card -->
+        <div class="card border-0 shadow-sm">
+            <div class="card-body p-4">
+
+                <div class="row">
+
+                    <!-- Avatar -->
+                    <div class="col-md-3 text-center">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center mx-auto"
+                             style="width:120px;height:120px;font-size:48px;font-weight:bold;">
+
+                            <span th:text="${#strings.substring(worker.username,0,1)}">A</span>
+
+                        </div>
+
+                        <h4 class="mt-3"
+                            th:text="${worker.username}">
+                            Username
+                        </h4>
+
+                        <span class="badge bg-success"
+                              th:text="${worker.workerStatus}">
+                            ACTIVE
+                        </span>
+                    </div>
+
+                    <!-- Information -->
+                    <div class="col-md-9">
+
+                        <table class="table table-borderless align-middle">
+
+                            <tr>
+                                <th width="220">🆔 ID</th>
+                                <td th:text="${worker.id}"></td>
+                            </tr>
+
+                            <tr>
+                                <th>👤 Username</th>
+                                <td th:text="${worker.username}"></td>
+                            </tr>
+
+                            <tr>
+                                <th>📛 Surname</th>
+                                <td th:text="${worker.surname}"></td>
+                            </tr>
+
+                            <tr>
+                                <th>💼 Position</th>
+                                <td>
+                                    <span class="badge bg-primary"
+                                          th:text="${worker.position}">
+                                    </span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>📧 Email</th>
+                                <td th:text="${worker.email}"></td>
+                            </tr>
+
+                            <tr>
+                                <th>📱 Phone</th>
+                                <td th:text="${worker.phone}"></td>
+                            </tr>
+
+                            <tr>
+                                <th>📊 Status</th>
+                                <td>
+
+                                    <span class="badge rounded-pill"
+                                          th:classappend="${worker.workerStatus.name() == 'ACTIVE'}
+                                           ? 'bg-success'
+                                           : 'bg-secondary'"
+                                          th:text="${worker.workerStatus}">
+                                    </span>
+
+                                </td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="row mt-4">
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h2 class="text-primary"
+                            th:text="${totalTasks}">
+                            0
+                        </h2>
+                        <p class="text-muted mb-0">
+                            Total Tasks
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h2 class="text-warning"
+                            th:text="${inProgressTasks}">
+                            0
+                        </h2>
+                        <p class="text-muted mb-0">
+                            In Progress
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <h2 class="text-success"
+                            th:text="${completedTasks}">
+                            0
+                        </h2>
+                        <p class="text-muted mb-0">
+                            Completed
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>
