@@ -1,3 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>My Profile </title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; padding-top: 50px; }
+        .task-container { background: white; padding: 60px; border-radius: 15px; shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        /* Кастомные цвета для статусов, если не хочешь стандартные Bootstrap */
+        .status-done { background-color: #d4edda; color: #155724; }
+        .status-progress { background-color: #fff3cd; color: #856404; }
+        .status-new { background-color: #e2e3e5; color: #383d41; }
+    </style>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    </head>
+
 <div class="container">
     <div class="task-container shadow-sm">
 
@@ -95,6 +117,11 @@
                                 </td>
                             </tr>
 
+                            <tr>
+                            <th>Release Data</th>
+                                <td th:text="${worker.createdDate}"></td>
+                            </tr>
+
                         </table>
 
                     </div>
@@ -110,10 +137,7 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <h2 class="text-primary"
-                            th:text="${totalTasks}">
-                            0
-                        </h2>
+                        <span th:text="${statistics.totalTasks}"></span>
                         <p class="text-muted mb-0">
                             Total Tasks
                         </p>
@@ -124,10 +148,19 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <h2 class="text-warning"
-                            th:text="${inProgressTasks}">
-                            0
-                        </h2>
+                        <span th:text="${statistics.newTasks}"></span>
+                        <p class="text-muted mb-0">
+                            Total New Tasks
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-md-4">
+                <div class="card border-0 shadow-sm text-center">
+                    <div class="card-body">
+                        <span th:text="${statistics. inProgressTasks}"></span>
                         <p class="text-muted mb-0">
                             In Progress
                         </p>
@@ -138,10 +171,7 @@
             <div class="col-md-4">
                 <div class="card border-0 shadow-sm text-center">
                     <div class="card-body">
-                        <h2 class="text-success"
-                            th:text="${completedTasks}">
-                            0
-                        </h2>
+                        <span th:text="${statistics.completedTasks}"></span>
                         <p class="text-muted mb-0">
                             Completed
                         </p>
