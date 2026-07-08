@@ -171,16 +171,6 @@ public class WorkerService {
         return workerPage.map(workerMapper::toAdminWorkerResponse);
     }
 
-    // Вспомогательный метод для маппинга
-    private WorkerDTO convertToDTO(Worker worker) {
-        WorkerDTO dto = new WorkerDTO();
-        dto.setId(worker.getId());
-        dto.setUsername(worker.getUsername());
-        dto.setSurname(worker.getSurname());
-        dto.setPosition(worker.getPosition());
-        dto.setWorkerStatus(worker.getWorkerStatus());
-        return dto;
-    }
     @Transactional
     public AdminWorkerResponse restoreWorker(int id) {
         Worker worker = workerRepository.findById(id)
