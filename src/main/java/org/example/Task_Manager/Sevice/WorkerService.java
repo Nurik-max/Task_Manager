@@ -66,6 +66,7 @@ public class WorkerService {
             throw new IllegalArgumentException("Username already exists");
         }
 
+
        Worker worker = workerMapper.toEntity(dto);
 //        worker.setUserRole(UserRole.USER);
 //        worker.setWorkerStatus(WorkerStatus.WORKS);
@@ -104,14 +105,23 @@ public class WorkerService {
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
         workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
         Worker updatedWorker = workerRepository.save(existingWorker);
+        System.out.println(updatedWorker.getPhone());
         return workerMapper.toUserResponse(updatedWorker);
     }
 
+    @Transactional
     public WorkerDTO showWorker(int id){
        Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 //       List<Task> workerListOfTask = taskService.workerListOfTask(id);
        return workerMapper.toUserResponse(worker);
     }
+
+    @Transactional
+    public ProfileUpdateDTO showProfile(int id) {
+        Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
+        return workerMapper.toProfileUpdateDTO(worker);
+    }
+
 
     @Transactional
     public AdminWorkerResponse softDeleteWorker(int id){
