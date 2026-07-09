@@ -33,6 +33,9 @@ public class Worker {
     @Column(name = "email", nullable = false,length = 30)
     private String email;
 
+    @Column(name = "phone",  nullable = false,length = 10)
+    private String phone;
+
     @Column(name = "password", nullable = false, length = 60)
     private String password;
 
