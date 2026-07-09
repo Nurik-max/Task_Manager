@@ -46,4 +46,6 @@ public interface WorkerMapper {
             ProfileUpdateDTO dto,
             @MappingTarget Worker worker
     );
+
+    ProfileUpdateDTO toProfileUpdateDTO(Worker worker);
 }
