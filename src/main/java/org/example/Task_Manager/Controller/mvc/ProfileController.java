@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/profile")
 public class ProfileController {
 
-private WorkerService workerService;
-private TaskStatisticsService taskStatisticsService;
+private final WorkerService workerService;
+private final TaskStatisticsService taskStatisticsService;
 /*TODO LIST: make templates for them
    - make profileDTO for profile
    - make updateProfile for profile*/
@@ -46,6 +46,11 @@ public  ProfileController(WorkerService workerService, TaskStatisticsService tas
         return "profile/profile";
     }
 
+    @GetMapping("/edit")
+    public String editProfile(@AuthenticationPrincipal WorkerDetails workerDetails, Model model) {
+    model.addAttribute("worker", workerService.showProfile(workerDetails.getWorker().getId()));
+    return "profile/editProfile";
+    }
 
     @PostMapping
     public String update(

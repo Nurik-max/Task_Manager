@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.Task_Manager.Model.WorkerStatus;
 
 @Getter
 @Setter
@@ -12,11 +13,19 @@ import lombok.Setter;
 public class ProfileUpdateDTO {
 
     @NotBlank
-    private String name;
+    private String username;
 
     @NotBlank
     private String surname;
 
     @Email
     private String email;
+
+    @NotBlank
+    private String position;
+
+    @NotBlank
+    private String phone;
+
+    private WorkerStatus workerStatus;
 }
