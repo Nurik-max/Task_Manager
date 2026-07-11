@@ -3,6 +3,7 @@ package org.example.Task_Manager.Controller.mvc;
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
+import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Sevice.TaskStatisticsService;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.example.Task_Manager.details.WorkerDetails;
@@ -34,7 +35,7 @@ public  ProfileController(WorkerService workerService, TaskStatisticsService tas
 }
 
 
-    @GetMapping("/profile")
+    @GetMapping
     public String profile(
             @AuthenticationPrincipal WorkerDetails workerDetails,
             Model model) {
@@ -47,6 +48,11 @@ public  ProfileController(WorkerService workerService, TaskStatisticsService tas
                 "statistics", taskStatisticsService.getStatistics(workerDetails.getWorker().getId())
         );
 
+        if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
+            model.addAttribute("baseUrl", "/tasks");
+        } else {
+            model.addAttribute("baseUrl", "/tasks/my");
+        }
         return "profile/profile";
     }
 
