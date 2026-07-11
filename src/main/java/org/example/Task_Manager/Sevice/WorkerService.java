@@ -26,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -194,10 +195,9 @@ public class WorkerService {
     }
 
     @Transactional
-    public void changePassword(ChangePasswordDTO dto,
-                               WorkerDetails workerDetails) {
+    public void changePassword(int id, ChangePasswordDTO dto) {
 
-        Worker worker = workerDetails.getWorker();
+        Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 
         if (!passwordEncoder.matches(dto.getOldPassword(), worker.getPassword())) {
             throw new RuntimeException("Old password is incorrect");
