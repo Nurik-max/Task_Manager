@@ -66,10 +66,12 @@ public class WorkerService {
             throw new IllegalArgumentException("Username already exists");
         }
 
-
        Worker worker = workerMapper.toEntity(dto);
-//        worker.setUserRole(UserRole.USER);
-//        worker.setWorkerStatus(WorkerStatus.WORKS);
+        if(workerRepository.count() == 0){
+            worker.setUserRole(UserRole.ADMIN);
+        } else {
+            worker.setUserRole(UserRole.USER);
+        }
         worker.setPassword(passwordEncoder.encode(dto.getPassword()));
         workerRepository.save(worker);
 
