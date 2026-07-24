@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Trash Bin</title>
+    <title>Trash</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -82,12 +82,12 @@
                     <!-- DATE & TIME FILTER -->
                     <div class="col-md-2">
                         <label class="form-label small text-muted">From:</label>
-                        <input type="text" name="start" id="start-date" th:value="${#temporals.format(start, 'yyyy-MM-dd''T''HH:mm')}" class="form-control form-control-sm" placeholder="Select date...">
+                        <input type="text" name="start" id="start-date" th:value="${start != null ? #temporals.format(start, 'yyyy-MM-dd''T''HH:mm') : ''}" class="form-control form-control-sm" placeholder="Select date...">
                     </div>
 
                     <div class="col-md-2">
                         <label class="form-label small text-muted">To:</label>
-                        <input type="text" name="end" id="end-date" th:value="${#temporals.format(start, 'yyyy-MM-dd''T''HH:mm')}" class="form-control form-control-sm" placeholder="Select date...">
+                        <input type="text" name="end" id="end-date" th:value="${end != null ? #temporals.format(end, 'yyyy-MM-dd''T''HH:mm') : ''}" class="form-control form-control-sm" placeholder="Select date...">
                     </div>
 
 
