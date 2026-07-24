@@ -84,6 +84,8 @@ public class TaskController {
       //For usual task
       Page<AdminResponse> adminResponses = adminTaskService.getTasks(statusEnum,priorityEnum ,keyword,username, start, end, isDeleted, pageable);
 
+    System.out.println("start = " + start);
+    System.out.println("end   = " + end);
 
         model.addAttribute("tasks", adminResponses.getContent());
         model.addAttribute("currentPage", page);
