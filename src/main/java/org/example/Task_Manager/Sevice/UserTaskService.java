@@ -43,6 +43,10 @@ public class UserTaskService {
 
         Worker currentWorker = workerDetails.getWorker();
 
+        System.out.println("Username: " + currentWorker.getUsername());
+        System.out.println("Role: " + currentWorker.getUserRole());
+        System.out.println("Id: " + currentWorker.getId());
+
         Specification<Task> spec =
                 Specification.where(TaskSpecifications.isDeleted(isDeleted));
         //filter for status
@@ -73,8 +77,8 @@ public class UserTaskService {
 
         if (currentWorker.getUserRole() != UserRole.ADMIN) {
             spec = spec.and(
-                    TaskSpecifications.hasWorker(
-                            currentWorker.getUsername()
+                    TaskSpecifications.hasWorkerId(
+                            currentWorker.getId()
                     )
             );
         }
