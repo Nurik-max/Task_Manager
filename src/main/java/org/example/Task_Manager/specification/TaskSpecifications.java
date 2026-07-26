@@ -69,14 +69,21 @@ public class TaskSpecifications {
     public static Specification<Task> hasWorker(String name){
         return ((root, query, criteriaBuilder) -> {
 
-            if(name == null || name.isBlank()){
-               return criteriaBuilder.conjunction();
+            if (name == null || name.isBlank()) {
+                return criteriaBuilder.conjunction();
             }
 
-            return criteriaBuilder.like(criteriaBuilder.
-                    lower(root.join("worker").get("username")),"%" + name.toLowerCase() + "%");
-        });
+            return criteriaBuilder.equal(
+                    criteriaBuilder.lower(root.join("worker").get("username")),
+                    name.toLowerCase() );
+            }
+        );
         }
+
+    public static Specification<Task> hasWorkerId(Integer workerId) {
+        return (root, query, cb) ->
+                cb.equal(root.join("worker").get("id"), workerId);
+    }
 
 
     //Methods for sorting by date
