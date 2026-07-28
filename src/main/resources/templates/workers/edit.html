@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Edit Worker</title>
@@ -40,6 +40,25 @@
                 <label class="form-label">Email</label>
                 <input type="text" th:field="*{email}" class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
                 <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Phone</label>
+                <input type="text" th:field="*{phone}" class="form-control" th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+                <div class="invalid-feedback" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+            </div>
+
+
+            <div class="mb-4">
+
+                <label class="form-label">User Role</label>
+                <select th:field="*{userRole}" class="form-select">
+                    <option th:each="role : ${T(org.example.Task_Manager.Model.UserRole).values()}"
+                            th:value="${role}"
+                            th:text="${role}">
+                    </option>
+                </select>
+
             </div>
 
             <div class="mb-3">
