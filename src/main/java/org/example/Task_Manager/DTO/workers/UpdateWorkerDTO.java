@@ -21,6 +21,9 @@ public class UpdateWorkerDTO {
     @NotBlank
     private String email;
 
+    @NotBlank
+    private String phone;
+
     public UpdateWorkerDTO() {
     }
 
