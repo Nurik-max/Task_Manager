@@ -8,7 +8,7 @@
 
 Веб-приложение для управления задачами на Spring Boot.
 
-## Технологии: 
+## Технологии 
 - Java 21 
 - Spring Boot
 - Spring Security 
@@ -29,13 +29,13 @@
 
 ## Структура проекта
 src/main/java/org/example/Task_Manager
-- ├── Controller
-- ├── DTO
-- ├── Entity
-- ├── Repository
-- ├── Security
-- ├── Service
-- └── Config
+ - ├── Controller
+ - ├── DTO
+ - ├── Entity
+ - ├── Repository
+ - ├── Security
+ - ├── Service
+ - └── Config
 
 ## Статус проекта
 Проект находится в активной разработке.
@@ -60,13 +60,13 @@ Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 ## Скриншоты
 
-# Главная страница с задачами
+### Главная страница с задачами
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-23-09" src="https://github.com/user-attachments/assets/56b6990c-3cef-43aa-8be8-1d4fa0d05f38" />
 
-# Страница со списком сотрудников
+### Страница со списком сотрудников
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-25-21" src="https://github.com/user-attachments/assets/2ec79212-5ec8-4fec-8c67-3f93e08d01a1" />
 
-# REST API версия
+### REST API версия
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-54-17" src="https://github.com/user-attachments/assets/8bc17eb4-b178-4586-965c-2361a131080d" />
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-59-52" src="https://github.com/user-attachments/assets/27c05b79-1fa4-44c6-a777-cc7df05aa12c" />
 
