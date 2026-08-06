@@ -64,6 +64,7 @@ Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 # REST API версия
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-54-17" src="https://github.com/user-attachments/assets/8bc17eb4-b178-4586-965c-2361a131080d" />
-<img width="1844" height="977" alt="Screenshot From 2026-08-06 07-55-26" src="https://github.com/user-attachments/assets/b169cf34-79ee-4d7e-b0ce-90af03d33c1f" />
+<img width="1844" height="977" alt="Screenshot From 2026-08-06 07-59-52" src="https://github.com/user-attachments/assets/27c05b79-1fa4-44c6-a777-cc7df05aa12c" />
+
 
 
