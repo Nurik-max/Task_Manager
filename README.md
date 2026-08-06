@@ -61,3 +61,9 @@ Swagger UI: http://localhost:8080/swagger-ui/index.html
 
 # Страница со списком сотрудников
 <img width="1844" height="977" alt="Screenshot From 2026-08-06 07-25-21" src="https://github.com/user-attachments/assets/2ec79212-5ec8-4fec-8c67-3f93e08d01a1" />
+
+# REST API версия
+<img width="1844" height="977" alt="Screenshot From 2026-08-06 07-54-17" src="https://github.com/user-attachments/assets/8bc17eb4-b178-4586-965c-2361a131080d" />
+<img width="1844" height="977" alt="Screenshot From 2026-08-06 07-55-26" src="https://github.com/user-attachments/assets/b169cf34-79ee-4d7e-b0ce-90af03d33c1f" />
+
+
