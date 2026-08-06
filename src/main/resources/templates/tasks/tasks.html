@@ -31,11 +31,11 @@
 
                 <a th:href="@{/tasks/new}" class="btn btn-primary">➕ Create New Task</a>
 
-                <form th:action="@{/logout}" method="post" style="display:inline;">
-                <button type="submit" class="btn btn-outline-danger">
-                    Logout
-                </button>
-            </form>
+<!--                <form th:action="@{/logout}" method="post" style="display:inline;">-->
+<!--                <button type="submit" class="btn btn-outline-danger">-->
+<!--                    Logout-->
+<!--&lt;!&ndash;                </button>&ndash;&gt;-->
+<!--            </form>-->
                 <a th:if="${isAdminPage}" href="/workers" class="btn btn-secondary"> Workers</a>
 
             </div>
