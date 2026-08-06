@@ -51,7 +51,7 @@ cd Task_Manager
 docker compose up --build
 ```
 
-Приложение: http://localhost:8080
+Приложение: http://localhost:8080/login
 
 Swagger UI: http://localhost:8080/swagger-ui/index.html
 ## Скриншоты
