@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<body>
+
+<div th:fragment="navbar">
+    <style>
+        .app-navbar {
+            background: #ffffff;
+            border-bottom: 1px solid #e5e7eb;
+            padding: 14px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            margin-bottom: 24px;
+        }
+
+        .app-navbar__brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            font-size: 20px;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .app-navbar__logo {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .app-navbar__right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .app-navbar__user {
+            color: #374151;
+            font-size: 14px;
+            font-weight: 600;
+            padding: 6px 12px;
+            background: #f3f4f6;
+            border-radius: 999px;
+        }
+
+        .app-navbar__link {
+            text-decoration: none;
+            color: #374151;
+            font-weight: 600;
+            padding: 8px 14px;
+            border-radius: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .app-navbar__link:hover {
+            background: #eff6ff;
+            color: #2563eb;
+        }
+
+        .app-navbar__profile {
+            background: #2563eb;
+            color: white !important;
+        }
+
+        .app-navbar__profile:hover {
+            background: #1d4ed8;
+            color: white !important;
+        }
+
+        .app-navbar__logout {
+            background: #ffffff;
+            border: 1px solid #e5e7eb;
+            color: #dc2626;
+            padding: 8px 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .app-navbar__logout:hover {
+            background: #fef2f2;
+            border-color: #fecaca;
+        }
+
+        @media (max-width: 640px) {
+            .app-navbar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 14px;
+                padding: 16px;
+            }
+
+            .app-navbar__right {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+
+    <nav class="app-navbar">
+
+        <a class="app-navbar__brand" th:href="@{/tasks}">
+            <div class="app-navbar__logo">TM</div>
+            <span>Task Manager</span>
+        </a>
+
+        <div class="app-navbar__right">
+
+            <span class="app-navbar__user"
+                  sec:authentication="name">
+                user
+            </span>
+
+            <a class="app-navbar__link"
+               th:href="@{/tasks}">
+                Tasks
+            </a>
+
+            <a class="app-navbar__link app-navbar__profile"
+               th:href="@{/profile}">
+                My Profile
+            </a>
+
+            <form th:action="@{/logout}"
+                  method="post"
+                  style="margin:0;">
+
+                <button class="app-navbar__logout"
+                        type="submit">
+                    Logout
+                </button>
+
+            </form>
+
+        </div>
+
+    </nav>
+</div>
+
+</body>
+</html>
