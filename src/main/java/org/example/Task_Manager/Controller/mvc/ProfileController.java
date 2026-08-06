@@ -104,11 +104,18 @@ public  ProfileController(WorkerService workerService, TaskStatisticsService tas
                     "Password changed successfully"
             );
 
+
         } catch (RuntimeException e) {
 
             model.addAttribute("error", e.getMessage());
 
             return "profile/change-password";
+        }
+
+        if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
+            model.addAttribute("baseUrl", "/tasks");
+        } else {
+            model.addAttribute("baseUrl", "/tasks/my");
         }
 
         return "redirect:/profile";
