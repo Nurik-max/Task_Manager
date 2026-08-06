@@ -8,12 +8,17 @@
 
 Веб-приложение для управления задачами на Spring Boot.
 
-### Task Manager — веб-приложение для управления задачами
+## Технологии: 
+- Java 21 
+- Spring Boot
+- Spring Security 
+- Spring Data JPA 
+- PostgreSQL 
+- Thymeleaf 
+- Docker
+- Swagger/OpenAPI.
 
-**GitHub:** https://github.com/Nurik-max/Task_Manager
-
-Технологии: Java 21, Spring Boot, Spring Security, Spring Data JPA, PostgreSQL, Thymeleaf, Docker, Swagger/OpenAPI.
-
+## Основные возможности
 * реализовал регистрацию и аутентификацию пользователей;
 * настроил разграничение ролей ADMIN и USER;
 * разработал CRUD-функциональность для задач;
@@ -24,24 +29,21 @@
 
 ## Структура проекта
 src/main/java/org/example/Task_Manager
-├── Controller
-├── DTO
-├── Entity
-├── Repository
-├── Security
-├── Service
-└── Config
+- ├── Controller
+- ├── DTO
+- ├── Entity
+- ├── Repository
+- ├── Security
+- ├── Service
+- └── Config
 
 ## Статус проекта
-
 Проект находится в активной разработке.
-
 Планируется:
-
-улучшение интерфейса;
-пагинация и сортировка;
-дополнительные REST endpoints;
-расширение тестового покрытия.
+- улучшение интерфейса;
+- пагинация и сортировка;
+- дополнительные REST endpoints;
+- расширение тестового покрытия.
 
 ## Быстрый старт
 
@@ -50,10 +52,12 @@ git clone https://github.com/Nurik-max/Task_Manager.git
 cd Task_Manager
 docker compose up --build
 ```
+Приложение: http://localhost:8080
 
-Приложение: http://localhost:8080/login
+Страница входа: http://localhost:8080/login
 
 Swagger UI: http://localhost:8080/swagger-ui/index.html
+
 ## Скриншоты
 
 # Главная страница с задачами
