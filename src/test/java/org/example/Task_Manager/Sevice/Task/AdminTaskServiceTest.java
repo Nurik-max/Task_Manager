@@ -1,5 +1,7 @@
 package org.example.Task_Manager.Sevice.Task;
 
+import org.example.Task_Manager.Exceptions.TaskNotFoundException;
+import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Repository.TaskRepository;
@@ -14,8 +16,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.List;
 import java.util.Optional;
 
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class AdminTaskServiceTest {
@@ -30,35 +35,37 @@ class AdminTaskServiceTest {
     private WorkerRepository workerRepository;
 
     @Test
-    void shouldReturnTasksWhenWorkerExists(){
+    void shouldReturnTasksByWorkerId(){
         int workerId = 1;
         Worker worker = new Worker();
+        worker.setId(workerId);
         List<Task> tasks = List.of(new Task());
 
-        when(workerRepository.findById(workerId))
-                .thenReturn(Optional.of(worker));
+        when(workerRepository.findById(workerId)).thenReturn(Optional.of(worker));
 
-        when(taskRepository.findByWorker(worker))
+        when(taskRepository.findByWorker_Id(workerId))
                 .thenReturn(tasks);
 
-//        List<Task> result = taskService.workerListOfTask(workerId);
-//
-//        assertEquals(tasks, result);
+        List<Task> list = adminTaskService.getTasksByWorkerId(workerId);
 
-        verify(workerRepository).findById(workerId);
-        verify(taskRepository).findByWorker(worker);
+        assertEquals(tasks,list);
+        verify(taskRepository).findByWorker_Id(workerId);
+
     }
     @Test
-    void shouldThrowExceptionWhenWorkerNotFound(){
+    void shouldThrowExceptionWhenWorkerNotFound() {
         int workerId = 999;
 
         when(workerRepository.findById(workerId))
                 .thenReturn(Optional.empty());
 
-//        assertThrows(WorkerNotFoundException.class, () -> {
-//            taskService.workerListOfTask(workerId);
-//        });
+        assertThrows(
+                WorkerNotFoundException.class,
+                () -> adminTaskService.getTasksByWorkerId(workerId)
+        );
 
         verify(workerRepository).findById(workerId);
+
+        verifyNoInteractions(taskRepository);
     }
 }

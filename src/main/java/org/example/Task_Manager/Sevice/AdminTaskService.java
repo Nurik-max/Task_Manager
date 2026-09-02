@@ -200,7 +200,8 @@ public class AdminTaskService {
     }
     @Transactional
     public List<Task> getTasksByWorkerId(int updatedWorker){
-
+        Worker worker = workerRepository.findById(updatedWorker)
+                .orElseThrow(() -> new WorkerNotFoundException(updatedWorker));
         return taskRepository.findByWorker_Id(updatedWorker);
     }
 

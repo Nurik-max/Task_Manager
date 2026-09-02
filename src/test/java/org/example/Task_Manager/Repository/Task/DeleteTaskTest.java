@@ -10,11 +10,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.ActiveProfiles;
 
 @Transactional
 @DataJpaTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class DeleteTaskTest {
 
@@ -22,7 +23,7 @@ public class DeleteTaskTest {
     private TaskRepository taskRepository;
 
     @Test
-    void deleteTask(){
+    void deletedTask(){
 
         Task task = new Task();
         task.setDescription("Good morning");
@@ -38,5 +39,27 @@ public class DeleteTaskTest {
         Task deltedTask = taskRepository.findById(id).orElse(null);
 
         Assertions.assertNull(deltedTask);
+    }
+
+        @Test
+       void shouldReturnExceptionWhenIdIsNull(){
+
+           InvalidDataAccessApiUsageException exception = Assertions.assertThrows(InvalidDataAccessApiUsageException.class,
+                   () -> taskRepository.findById(null)
+           );
+           Assertions.assertTrue(exception.getMessage().contains("id must not be null")
+                   || exception.getCause() instanceof IllegalArgumentException);
+       }
+
+    @Test
+    void shouldThrowExceptionWhenDeletingNullTask() {
+
+        InvalidDataAccessApiUsageException exception = Assertions.assertThrows(
+                InvalidDataAccessApiUsageException.class,
+                () -> taskRepository.delete((Task) null)
+        );
+
+        Assertions.assertTrue(exception.getMessage().contains("Entity must not be null")
+                || exception.getCause() instanceof IllegalArgumentException);
     }
 }

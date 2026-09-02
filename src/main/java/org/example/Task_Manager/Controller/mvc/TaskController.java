@@ -36,7 +36,6 @@ public class TaskController {
 
     private final AdminTaskService adminTaskService;
     private final UserTaskService userTaskService;
-
     private final WorkerRepository workerRepository;
 
     public TaskController(AdminTaskService adminTaskService, UserTaskService userTaskService, WorkerRepository workerRepository) {
@@ -182,7 +181,7 @@ public class TaskController {
 
     // 📌 создание
     @PreAuthorize("hasRole('ADMIN')") //For ADMIN
-    @PostMapping
+    @PostMapping("/create/admin")
     public String createNewTask(@ModelAttribute("task") AdminCreateTaskRequest taskDTO,
                                 BindingResult bindingResult,
                                 @AuthenticationPrincipal WorkerDetails workerDetails,
@@ -207,7 +206,7 @@ public class TaskController {
 
 
     @PreAuthorize("isAuthenticated()") //For USERs
-    @PostMapping("/my")
+    @PostMapping("/create/user")
     public String createMyTasks(@ModelAttribute("task") @Valid CreateTaskRequest request, BindingResult bindingResult,
                                 Model model,
                                 @AuthenticationPrincipal WorkerDetails workerDetails){
@@ -265,12 +264,6 @@ public class TaskController {
         return "redirect:/tasks/edit";
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/{id}/edit/my")
-//    public String editMyTask(@PathVariable("id") int id,@AuthenticationPrincipal WorkerDetails workerDetails ,Model model){
-//        model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
-//        return "tasks/user_edit";
-//    }
 
     @PreAuthorize("isAuthenticated()") //for USERs
     @PostMapping("/{id}/user")

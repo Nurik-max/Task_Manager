@@ -10,8 +10,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
 
@@ -22,6 +24,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
+//@ActiveProfiles("test")
+//@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AdminTaskServiceGetTasksTest {
 
     @InjectMocks
@@ -57,7 +61,7 @@ class AdminTaskServiceGetTasksTest {
         // Assert
         assertNotNull(result);
         assertEquals(1, result.getContent().size());
-
+        assertEquals(dto, result.getContent().get(0));
         verify(taskRepository).findAll( any(Specification.class), eq(pageable));
         verify(taskMapper).toAdminResponse(task);
     }
