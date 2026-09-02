@@ -96,7 +96,13 @@ public class WorkerController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public String create(@ModelAttribute("worker")AdminCreateWorkerDTO adminCreateWorkerDTO) {
+    public String create( @Valid @ModelAttribute("worker")AdminCreateWorkerDTO adminCreateWorkerDTO,
+      BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "workers/new";
+        }
+
         workerService.createWorker(adminCreateWorkerDTO);
         return "redirect:/workers";
     }
