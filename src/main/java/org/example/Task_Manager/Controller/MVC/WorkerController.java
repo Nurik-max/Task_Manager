@@ -1,11 +1,9 @@
-package org.example.Task_Manager.Controller.mvc;
+package org.example.Task_Manager.Controller.MVC;
 
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.AdminCreateWorkerDTO;
-import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
-import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
@@ -15,12 +13,10 @@ import org.example.Task_Manager.Repository.WorkerMapper;
 import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.WorkerService;
-import org.example.Task_Manager.details.WorkerDetails;
 import org.example.Task_Manager.specification.WorkerSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -171,7 +167,7 @@ public class WorkerController {
 
         // Получаем список всех работников, кроме того, которого редактируем
         List<Worker> allWorkers = workerService.findAllExcept(id);
-        allWorkers.removeIf(w -> w.getId() == id);
+//        allWorkers.removeIf(w -> w.getId() == id);
         model.addAttribute("allWorkers", allWorkers);
     }
 }
