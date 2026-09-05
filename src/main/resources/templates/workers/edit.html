@@ -101,6 +101,7 @@
                         </table>
                     </div>
 
+                    <div  sec:authorize="hasRole('ADMIN')">
                     <form th:action="@{/workers/{id}/force-delete(id=${worker.id})}" method="post">
                     <div class="mb-3">
                         <select name="newWorkerId" class="form-select" required>
@@ -117,12 +118,14 @@
                 </div>
             </div>
 
+                <div  sec:authorize="hasRole('ADMIN')">
             <div th:if="${#lists.isEmpty(tasks)}">
                 <p>У работника нет задач. Вы можете безопасно его удалить.</p>
                 <form th:action="@{/workers/{id}/delete(id=${worker.id})}" method="POST">
                     <input type="hidden" name="_method" value="DELETE"/>
                     <button type="submit" class="btn btn-danger">Удалить работника</button>
                 </form>
+            </div>
             </div>
         </div>
 </div>
