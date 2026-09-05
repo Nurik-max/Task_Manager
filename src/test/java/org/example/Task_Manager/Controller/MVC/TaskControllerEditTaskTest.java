@@ -1,7 +1,5 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.MVC;
 
-import org.example.Task_Manager.Controller.mvc.TaskController;
-import org.example.Task_Manager.DTO.tasks.TaskDTO;
 import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Model.Status;
@@ -16,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 

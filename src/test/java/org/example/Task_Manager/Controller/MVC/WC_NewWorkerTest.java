@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller.mvc;
+package org.example.Task_Manager.Controller.MVC;
 
 import org.example.Task_Manager.Controller.security.CustomAuthenticationSuccessHandler;
 import org.example.Task_Manager.Model.UserRole;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;

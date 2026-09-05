@@ -1,5 +1,4 @@
-package org.example.Task_Manager.Controller;
-import org.example.Task_Manager.Controller.mvc.TaskController;
+package org.example.Task_Manager.Controller.MVC;
 import org.example.Task_Manager.DTO.tasks.response.UserResponse;
 import org.example.Task_Manager.Model.Priority;
 import org.example.Task_Manager.Model.Status;

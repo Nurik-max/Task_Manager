@@ -1,6 +1,5 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.MVC;
 
-import org.example.Task_Manager.Controller.mvc.TaskController;
 import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.UserTaskService;

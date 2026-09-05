@@ -1,7 +1,6 @@
 package org.example.Task_Manager.Repository.Task;
 
-import org.example.Task_Manager.Controller.mvc.TaskController;
-import org.example.Task_Manager.DTO.tasks.TaskDTO;
+import org.example.Task_Manager.Controller.MVC.TaskController;
 import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.Worker;
@@ -11,14 +10,10 @@ import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.Sevice.UserTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.junit.jupiter.api.Test;
-import org.mockito.internal.stubbing.BaseStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 

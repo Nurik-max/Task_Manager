@@ -1,9 +1,7 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.MVC;
 
-import org.example.Task_Manager.Controller.mvc.TaskController;
 import org.example.Task_Manager.Controller.security.CustomAuthenticationSuccessHandler;
 import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
-import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Repository.WorkerRepository;
@@ -17,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 

@@ -1,6 +1,5 @@
-package org.example.Task_Manager.Controller;
+package org.example.Task_Manager.Controller.MVC;
 
-import org.example.Task_Manager.Controller.mvc.WorkerController;
 import org.example.Task_Manager.Controller.security.CustomAuthenticationSuccessHandler;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.Model.UserRole;

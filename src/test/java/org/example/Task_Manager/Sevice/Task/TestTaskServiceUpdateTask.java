@@ -1,8 +1,7 @@
 package org.example.Task_Manager.Sevice.Task;
 
 
-import org.example.Task_Manager.Controller.mvc.TaskController;
-import org.example.Task_Manager.DTO.tasks.request.AdminUpdateTaskRequest;
+import org.example.Task_Manager.Controller.MVC.TaskController;
 import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
