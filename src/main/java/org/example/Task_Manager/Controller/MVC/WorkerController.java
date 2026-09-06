@@ -150,7 +150,7 @@ public class WorkerController {
     }
 
     @PostMapping("/{id}/restore")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String restoreWorker(@PathVariable int id) {
         workerService.restoreWorker(id);
         return "redirect:/workers"; // Возвращаемся в корзину
