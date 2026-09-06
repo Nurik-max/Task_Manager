@@ -89,14 +89,13 @@ public class WorkerRestController {
     }
 
     @PostMapping("/{id}/soft-delete")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> softDeleteWorker(@PathVariable("id") int id){
-
        AdminWorkerResponse response = workerService.softDeleteWorker(id);
         return ResponseEntity.ok(response);
     }
 
-
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}hard-delete")
     public ResponseEntity<Void> hardDeleteWorker(
             @PathVariable int id,
@@ -108,7 +107,7 @@ public class WorkerRestController {
     }
 
     @PostMapping("/{id}/restore")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize(" hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> restoreWorker(@PathVariable int id) {
         AdminWorkerResponse restoredWorker = workerService.restoreWorker(id);
         return ResponseEntity.ok(restoredWorker);

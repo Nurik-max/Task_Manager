@@ -129,16 +129,15 @@ public class WorkerController {
     }
 
     @PostMapping("/{id}/delete")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String softDeleteWorker(@PathVariable("id") int id){
-        Worker worker = workerRepository.findById(id).orElseThrow(()-> new WorkerNotFoundException(id));
         workerService.softDeleteWorker(id);
         return "redirect:/workers";
     }
     // Измени @GetMapping на @DeleteMapping
 // Измени путь на "/{id}/delete"
     @PostMapping("/{id}/force-delete")
-    @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public String hardDeleteWorker(@PathVariable("id") int id, @RequestParam(required = false) Integer newWorkerId) {
 
         System.out.println(">>> Запрос на удаление получен! ID = " + id + ", NewWorkerId = " + newWorkerId);
