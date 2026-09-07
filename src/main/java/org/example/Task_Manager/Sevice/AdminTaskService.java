@@ -120,8 +120,6 @@ public class AdminTaskService {
       Task task = getAccessibleTask(id, workerDetails);
         task.setDeleted(true);
         task.setDeletedAt(LocalDateTime.now());
-//        taskRepository.save(task);
-//        System.out.println(task.getDeletedAt());
     }
 
     @Transactional
@@ -212,7 +210,7 @@ public class AdminTaskService {
         Task task;
         if (currentWorker.getUserRole() == UserRole.ADMIN) {
 
-           task = taskRepository.findById(taskId)            // ...и никак его не использовали!
+           task = taskRepository.findById(taskId)
                     .orElseThrow(() -> new TaskNotFoundException(taskId));
         }
         else {
