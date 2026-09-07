@@ -1,6 +1,5 @@
 package org.example.Task_Manager.Sevice.Task;
 
-import org.example.Task_Manager.Exceptions.TaskNotFoundException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Task;
 import org.example.Task_Manager.Model.Worker;
@@ -23,7 +22,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class AdminTaskServiceTest {
+class ATS_GetTasksByWorkerIdTest {
 
     @InjectMocks
     private AdminTaskService adminTaskService;
