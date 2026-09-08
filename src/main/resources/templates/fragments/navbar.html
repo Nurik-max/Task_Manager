@@ -123,10 +123,21 @@
                 user
             </span>
 
+            <div  sec:authorize="hasRole('ADMIN')">
             <a class="app-navbar__link"
                th:href="@{/tasks}">
                 Tasks
             </a>
+            </div>
+
+            <div  sec:authorize="hasRole('USER')">
+                <a class="app-navbar__link"
+                   th:href="@{/tasks/my}">
+                    My Tasks
+                </a>
+            </div>
+
+
 
             <a class="app-navbar__link app-navbar__profile"
                th:href="@{/profile}">
