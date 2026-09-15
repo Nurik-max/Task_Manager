@@ -8,6 +8,7 @@ import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
+import org.example.Task_Manager.Exceptions.IncorrectPasswordException;
 import org.example.Task_Manager.Exceptions.ValidationException;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.*;
@@ -84,9 +85,6 @@ public class WorkerService {
          worker.setPassword(passwordEncoder.encode(adminCreateWorkerDTO.getPassword()));
          worker.setCreatedDate(LocalDateTime.now());
        Worker savedWorker =  workerRepository.save(worker);
-
-    System.out.println(adminCreateWorkerDTO.getEmail());
-    System.out.println(adminCreateWorkerDTO.getCreatedAt());
        return workerMapper.toAdminWorkerResponse(savedWorker);
     }
 
@@ -180,7 +178,7 @@ public class WorkerService {
         // 3. Получаем страницу сущностей
         Page<Worker> workerPage = workerRepository.findAll(spec, pageable);
 
-        // 4. Преобразуем Page<Worker> в Page<WorkerDTO>
+        // 4. Преобразуем Page<Worker> в Page<AdminWorkerResponse>
         return workerPage.map(workerMapper::toAdminWorkerResponse);
     }
 
@@ -200,7 +198,7 @@ public class WorkerService {
         Worker worker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
 
         if (!passwordEncoder.matches(dto.getOldPassword(), worker.getPassword())) {
-            throw new RuntimeException("Old password is incorrect");
+            throw new IncorrectPasswordException();
         }
 
         worker.setPassword(passwordEncoder.encode(dto.getNewPassword()));
