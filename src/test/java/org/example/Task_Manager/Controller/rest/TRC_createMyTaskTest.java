@@ -2,8 +2,10 @@ package org.example.Task_Manager.Controller.rest;
 
 import org.example.Task_Manager.Controller.security.CustomAuthenticationSuccessHandler;
 import org.example.Task_Manager.DTO.tasks.request.CreateTaskRequest;
+import org.example.Task_Manager.DTO.tasks.request.UpdateTaskRequest;
 import org.example.Task_Manager.DTO.tasks.response.UserResponse;
 import org.example.Task_Manager.Model.Priority;
+import org.example.Task_Manager.Model.Status;
 import org.example.Task_Manager.Model.UserRole;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Sevice.AdminTaskService;
@@ -20,10 +22,10 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -83,5 +85,19 @@ class TRC_createMyTaskTest {
                         && dto.getPriority().equals(Priority.HIGH)),
                 eq(workerDetails)
         );
+    }
+
+    @Test
+    void shouldReturnUnauthorized() throws Exception {
+
+        mockMvc.perform(patch("/api/tasks/user")
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{}"))
+
+                .andExpect(status().isUnauthorized());
+
+        verifyNoInteractions(userTaskService);
+
     }
 }
