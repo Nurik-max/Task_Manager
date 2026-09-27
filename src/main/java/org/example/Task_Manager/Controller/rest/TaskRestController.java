@@ -147,7 +147,7 @@ public class TaskRestController {
             @ApiResponse(responseCode = "404", description = "Task not found")
     })
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{id}/hard-delete")
     public ResponseEntity<Void> hardDeleteTask(
             @PathVariable int id,
             @AuthenticationPrincipal WorkerDetails workerDetails
