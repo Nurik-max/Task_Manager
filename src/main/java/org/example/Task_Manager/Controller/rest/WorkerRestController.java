@@ -29,7 +29,7 @@ public class WorkerRestController {
     private final WorkerService workerService;
     private final WorkerRepository workerRepository;
     private final WorkerMapper workerMapper;
-    private final AdminTaskService adminTaskService;
+
 
     @GetMapping("/worker-list")
     @PreAuthorize("hasRole('ADMIN')")
