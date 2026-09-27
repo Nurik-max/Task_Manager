@@ -64,9 +64,6 @@ public class WorkerRestController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> create(@RequestBody AdminCreateWorkerDTO adminCreateWorkerDTO) {
       AdminWorkerResponse savedWorker =  workerService.createWorker(adminCreateWorkerDTO);
-        System.out.println(savedWorker.getCreatedAt());
-        System.out.println(savedWorker.getEmail());
-        System.out.println(savedWorker.getId());
         return ResponseEntity.ok(savedWorker);
     }
 
