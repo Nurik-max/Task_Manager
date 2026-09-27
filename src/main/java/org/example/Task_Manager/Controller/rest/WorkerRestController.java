@@ -31,7 +31,7 @@ public class WorkerRestController {
     private final WorkerMapper workerMapper;
     private final AdminTaskService adminTaskService;
 
-    @GetMapping
+    @GetMapping("/worker-list")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Page<AdminWorkerResponse>> listWorkers(
             @RequestParam(defaultValue = "0") int page,
@@ -60,7 +60,7 @@ public class WorkerRestController {
         return ResponseEntity.ok(workersPage); // Путь к твоему HTML-файлу со списком
     }
 
-    @PostMapping
+    @PostMapping("/new")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> create(@RequestBody AdminCreateWorkerDTO adminCreateWorkerDTO) {
       AdminWorkerResponse savedWorker =  workerService.createWorker(adminCreateWorkerDTO);
@@ -71,7 +71,7 @@ public class WorkerRestController {
     }
 
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/edit")
     @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> update(@PathVariable("id") int id, @RequestBody UpdateWorkerDTO workerUpdateDTO) {
       AdminWorkerResponse updatedWorker = workerService.updateWorker(id, workerUpdateDTO);
