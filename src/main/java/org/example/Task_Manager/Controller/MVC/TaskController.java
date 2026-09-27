@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller.mvc;
+package org.example.Task_Manager.Controller.MVC;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.tasks.TaskDTO;
@@ -18,7 +18,6 @@ import org.example.Task_Manager.details.WorkerDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -241,9 +240,11 @@ public class TaskController {
         model.addAttribute("task", adminTaskService.showTask(id, workerDetails));
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             model.addAttribute("workers", workerRepository.findAll());
+            model.addAttribute("baseUrl", "/tasks");
             return "tasks/edit";
         }
         else {
+            model.addAttribute("baseUrl", "/tasks/my");
             return "tasks/user_edit";
         }
     }
