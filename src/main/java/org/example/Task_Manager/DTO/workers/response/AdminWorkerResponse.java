@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class AdminWorkerResponse {
 
-    private Long id;
+    private int id;
 
     private String username;
 
