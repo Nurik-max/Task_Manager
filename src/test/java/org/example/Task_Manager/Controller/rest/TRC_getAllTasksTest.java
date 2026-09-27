@@ -98,7 +98,7 @@ class TRC_getAllTasksTest {
                 "nurik",
                 null,
                 null,
-                true,
+                false,
                 pageable
         )).thenReturn(page);
 
@@ -109,7 +109,7 @@ class TRC_getAllTasksTest {
                         .param("priority", "HIGH")
                         .param("keyword", "test")
                         .param("username", "nurik")
-                        .param("isDeleted", "true"))
+                        .param("isDeleted", "false"))
                 .andExpect(status().isOk());
 
         verify(adminTaskService).getTasks(
@@ -119,7 +119,7 @@ class TRC_getAllTasksTest {
                 "nurik",
                 null,
                 null,
-                true,
+                false,
                 pageable
         );
     }
