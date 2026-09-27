@@ -1,4 +1,4 @@
-package org.example.Task_Manager.Controller.mvc;
+package org.example.Task_Manager.Controller.MVC;
 
 import jakarta.validation.Valid;
 import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
