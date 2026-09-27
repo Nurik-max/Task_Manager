@@ -1,9 +1,10 @@
-package org.example.Task_Manager.Sevice;
+package org.example.Task_Manager.Sevice.Task;
 
 import org.example.Task_Manager.DTO.tasks.response.AdminResponse;
 import org.example.Task_Manager.Model.*;
 import org.example.Task_Manager.Repository.TaskMapper;
 import org.example.Task_Manager.Repository.TaskRepository;
+import org.example.Task_Manager.Sevice.AdminTaskService;
 import org.example.Task_Manager.details.WorkerDetails;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
