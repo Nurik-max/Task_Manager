@@ -93,7 +93,7 @@ public class WorkerRestController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("/{id}hard-delete")
+    @DeleteMapping("/{id}/hard-delete")
     public ResponseEntity<Void> hardDeleteWorker(
             @PathVariable int id,
             @RequestParam(required = false) Integer newWorkerId) {
