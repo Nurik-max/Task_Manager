@@ -157,7 +157,6 @@ class WorkerRepositoryTest {
     void existsWorkerById() {
 
         Worker worker1 = new Worker();
-        worker1.setId(1);
         worker1.setUsername("Max");
         worker1.setSurname("Gilbert");
         worker1.setPosition("HR");
@@ -166,18 +165,16 @@ class WorkerRepositoryTest {
         worker1.setPhone("1234567890");
         worker1.setUserRole(UserRole.USER);
 
-        Worker worker2 = new Worker();
-        worker2.setId(2);
-        worker2.setUsername("John");
-        worker2.setSurname("Mustermann");
-        worker2.setPosition("engineer");
-        worker2.setEmail("2@.com");
-        worker2.setPassword("1234");
-        worker2.setPhone("1234567890");
-        worker2.setUserRole(UserRole.USER);
+        Worker worker24 = new Worker();
+        worker24.setUsername("John");
+        worker24.setSurname("Garden");
+        worker24.setPosition("engineer");
+        worker24.setEmail("24@.com");
+        worker24.setPassword("1234");
+        worker24.setPhone("1234567890");
+        worker24.setUserRole(UserRole.USER);
 
         Worker worker3 = new Worker();
-        worker3.setId(3);
         worker3.setUsername("Micael");
         worker3.setSurname("Walter");
         worker3.setPosition("engineer 2");
@@ -187,12 +184,12 @@ class WorkerRepositoryTest {
         worker3.setUserRole(UserRole.USER);
 
         repository.save(worker1);
-        repository.save(worker2);
+        repository.save(worker24);
         repository.save(worker3);
 
         repository.flush();
 
-       Boolean result = repository.existsWorkerById(2);
+       Boolean result = repository.existsWorkerById(worker24.getId());
 
         assertTrue(result);
     }

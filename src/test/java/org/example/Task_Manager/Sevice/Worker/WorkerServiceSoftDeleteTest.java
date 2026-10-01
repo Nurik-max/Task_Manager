@@ -1,8 +1,10 @@
 package org.example.Task_Manager.Sevice.Worker;
 
+import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Model.WorkerStatus;
+import org.example.Task_Manager.Repository.WorkerMapper;
 import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.junit.jupiter.api.Test;
@@ -26,8 +28,8 @@ class WorkerServiceSoftDeleteTest {
     @InjectMocks
     private WorkerService workerService;
 
-//    @Mock
-//    private WorkerMapper workerMapper;
+    @Mock
+    private WorkerMapper workerMapper;
 
     @Test
     void shouldSoftDeleteWorker() {
@@ -37,16 +39,20 @@ class WorkerServiceSoftDeleteTest {
         worker.setId(workerID);
         worker.setWorkerStatus(WorkerStatus.WORKS);
 
+        AdminWorkerResponse adminWorkerResponse = new AdminWorkerResponse();
+
         // 🔥 mock findById
         when(workerRepository.findById(workerID))
                 .thenReturn(Optional.of(worker));
+        when(workerMapper.toAdminWorkerResponse(worker)).thenReturn(adminWorkerResponse);
 
         // act
-        workerService.softDeleteWorker(workerID);
+       AdminWorkerResponse response = workerService.softDeleteWorker(workerID);
 
         // assert
         verify(workerRepository).findById(workerID);
         assertEquals(WorkerStatus.FIRED, worker.getWorkerStatus());
+        assertEquals(adminWorkerResponse, response);
     }
 
     @Test
