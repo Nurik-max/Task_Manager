@@ -15,7 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 @DataJpaTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 public class findByDescriptionContainingIgnoreCaseTest {
 
