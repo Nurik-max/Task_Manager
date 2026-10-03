@@ -168,7 +168,7 @@ public class TaskController {
 
         if (workerDetails.getWorker().getUserRole() == UserRole.ADMIN) {
             model.addAttribute("workers", workerRepository.findAll());
-            model.addAttribute("baseUrl", "/tasks");
+            model.addAttribute("baseUrl", "/tasks/admin");
         } else {
             model.addAttribute("baseUrl", "/tasks/create/user");
         }
@@ -189,7 +189,7 @@ public class TaskController {
         if (bindingResult.hasErrors()) {
 
                 model.addAttribute("workers", workerRepository.findAll());
-                model.addAttribute("baseUrl", "/tasks");
+                model.addAttribute("baseUrl", "/tasks/admin");
 
             return "tasks/new"; // ❗ ВАЖНО: return только тут
         }
