@@ -6,6 +6,7 @@ import org.example.Task_Manager.DTO.workers.UpdateWorkerDTO;
 import org.example.Task_Manager.DTO.workers.response.AdminWorkerResponse;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 
+import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
 import org.example.Task_Manager.Model.Worker;
 import org.example.Task_Manager.Model.WorkerStatus;
 import org.example.Task_Manager.Repository.WorkerMapper;
@@ -71,7 +72,6 @@ public class WorkerRestController {
     @PutMapping("/{id}/edit")
     @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> update(@PathVariable("id") int id, @RequestBody UpdateWorkerDTO workerUpdateDTO) {
-
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
         workerMapper.updateWorkerFromDTO(workerUpdateDTO, existingWorker);
         Worker updatedWorker = workerRepository.save(existingWorker);
