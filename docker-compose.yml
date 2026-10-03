@@ -8,6 +8,9 @@ services:
       - "8080:8080"
     environment:
       SPRING_PROFILES_ACTIVE: docker
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB}
+      DB_USERNAME: ${POSTGRES_USER}
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
     depends_on:
       - postgres
 
@@ -22,7 +25,6 @@ services:
       - "5433:5432"
     volumes:
       - task_manager_postgres_data:/var/lib/postgresql/data
-
 
 volumes:
   task_manager_postgres_data:
