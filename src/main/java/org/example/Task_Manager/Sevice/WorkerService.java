@@ -106,7 +106,7 @@ public class WorkerService {
         Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
         workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
         Worker updatedWorker = workerRepository.save(existingWorker);
-        System.out.println(updatedWorker.getPhone());
+
         return workerMapper.toUserResponse(updatedWorker);
     }
 
