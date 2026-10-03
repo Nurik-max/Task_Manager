@@ -71,8 +71,12 @@ public class WorkerRestController {
     @PutMapping("/{id}/edit")
     @PreAuthorize("#id == authentication.principal.worker.id or hasRole('ADMIN')")
     public ResponseEntity<AdminWorkerResponse> update(@PathVariable("id") int id, @RequestBody UpdateWorkerDTO workerUpdateDTO) {
-      AdminWorkerResponse updatedWorker = workerService.updateWorker(id, workerUpdateDTO);
-        return  ResponseEntity.ok(updatedWorker);
+
+        Worker existingWorker = workerRepository.findById(id).orElseThrow(() -> new WorkerNotFoundException(id));
+        workerMapper.updateWorkerFromDTO(workerUpdateDTO, existingWorker);
+        Worker updatedWorker = workerRepository.save(existingWorker);
+       AdminWorkerResponse workerResponse = workerMapper.toAdminWorkerResponse(updatedWorker);
+        return  ResponseEntity.ok(workerResponse);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
