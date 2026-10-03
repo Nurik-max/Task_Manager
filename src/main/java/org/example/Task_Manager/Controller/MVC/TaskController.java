@@ -170,7 +170,7 @@ public class TaskController {
             model.addAttribute("workers", workerRepository.findAll());
             model.addAttribute("baseUrl", "/tasks");
         } else {
-            model.addAttribute("baseUrl", "/tasks/my");
+            model.addAttribute("baseUrl", "/tasks/create/user");
         }
         System.out.println(workerDetails.getWorker().getUserRole());
         return "tasks/new";
@@ -211,7 +211,7 @@ public class TaskController {
                                 @AuthenticationPrincipal WorkerDetails workerDetails){
 
         if (bindingResult.hasErrors()) {
-            model.addAttribute("baseUrl", "/tasks/my");
+            model.addAttribute("baseUrl", "/tasks/create/user");
             return "tasks/new";
         }
 
