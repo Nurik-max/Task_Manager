@@ -47,7 +47,10 @@ public class ProfileRestController {
     public ResponseEntity<WorkerDTO> updateWorkerProfile(
             @AuthenticationPrincipal WorkerDetails workerDetails, @Valid @RequestBody ProfileUpdateDTO  profileUpdateDTO) {
 
-       WorkerDTO updatedWorker = workerService.updateProfile(workerDetails.getWorker().getId(), profileUpdateDTO);
+        Worker existingWorker = workerRepository.findById(workerDetails.getWorker().getId()).orElseThrow(()
+                -> new WorkerNotFoundException(workerDetails.getWorker().getId()));
+        workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
+        Worker updatedWorker = workerRepository.save(existingWorker);
 
        return ResponseEntity.ok(updatedWorker);
     }
