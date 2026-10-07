@@ -52,7 +52,7 @@ public class ProfileRestController {
         workerMapper.updateProfileFromDTO(profileUpdateDTO, existingWorker);
         Worker updatedWorker = workerRepository.save(existingWorker);
 
-       return ResponseEntity.ok(updatedWorker);
+       return ResponseEntity.ok(workerMapper.toUserResponse(updatedWorker));
     }
 
 
