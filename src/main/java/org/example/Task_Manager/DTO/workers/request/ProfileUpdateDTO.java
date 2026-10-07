@@ -12,19 +12,17 @@ import org.example.Task_Manager.Model.WorkerStatus;
 @NoArgsConstructor
 public class ProfileUpdateDTO {
 
-    @NotBlank
+
     private String username;
 
-    @NotBlank
+
     private String surname;
 
     @Email
     private String email;
 
-    @NotBlank
     private String position;
 
-    @NotBlank
     private String phone;
 
     private WorkerStatus workerStatus;
