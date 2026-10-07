@@ -6,6 +6,10 @@ import org.example.Task_Manager.DTO.workers.ChangePasswordDTO;
 import org.example.Task_Manager.DTO.workers.request.ProfileUpdateDTO;
 import org.example.Task_Manager.DTO.workers.response.WorkerDTO;
 import org.example.Task_Manager.DTO.workers.response.WorkerProfileResponse;
+import org.example.Task_Manager.Exceptions.WorkerNotFoundException;
+import org.example.Task_Manager.Model.Worker;
+import org.example.Task_Manager.Repository.WorkerMapper;
+import org.example.Task_Manager.Repository.WorkerRepository;
 import org.example.Task_Manager.Sevice.TaskStatisticsService;
 import org.example.Task_Manager.Sevice.WorkerService;
 import org.example.Task_Manager.details.WorkerDetails;
@@ -21,11 +25,15 @@ import org.springframework.web.bind.annotation.*;
 public class ProfileRestController {
 
     private final WorkerService workerService;
+    private final WorkerRepository workerRepository;
     private final TaskStatisticsService taskStatisticsService;
+    private final WorkerMapper workerMapper;
 
-    public ProfileRestController(WorkerService workerService, TaskStatisticsService taskStatisticsService) {
+    public ProfileRestController(WorkerService workerService, WorkerRepository workerRepository, TaskStatisticsService taskStatisticsService, WorkerMapper workerMapper) {
         this.workerService = workerService;
+        this.workerRepository = workerRepository;
         this.taskStatisticsService = taskStatisticsService;
+        this.workerMapper = workerMapper;
     }
 
 
