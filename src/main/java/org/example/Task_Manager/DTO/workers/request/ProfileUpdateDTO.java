@@ -1,7 +1,6 @@
 package org.example.Task_Manager.DTO.workers.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
